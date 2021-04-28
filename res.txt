@@ -1,1 +1,1 @@
-A&&ami&&B &part&  &part& *
+A&&B&&C &part&  &part& *

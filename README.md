@@ -9,9 +9,9 @@ C'est un outil pour représenter l'information sous la forme de fait et de graph
 
 ----
 
-# Syntaxe du LS faits
+# Syntaxe du prédicat: faits
 
-## prédicats à deux expressions
+## prédicats en trois partie
 [sujet] [lien] [verbe]
 
 ## exemple
@@ -22,7 +22,7 @@ Pour dire "Socrate est un homme":
 
 ----
 
-# Syntaxe du LS requête(1)
+# Syntaxe du prédicat: requête(1)
 
 ## principe
 Même structure que les faits mais avec l'utilisation de variables
@@ -33,7 +33,7 @@ Pas plus de `deux` variables par fait.
 
 ----
 
-# Syntaxe du LS requête(2)
+# Syntaxe du prédicat: requête(2)
 
 ## Cas 1
 check **A** est homme = "**Qui** est un homme?"
@@ -58,7 +58,7 @@ check **A** est **B** = "**Qu'est-ce qui** 'est' **quoi?**"
 
 ----
 
-# Syntaxe LS règles
+# Syntaxe du prédicat: règles
 
 ## Syntax
 add `if` [conditions] `then` [conclusions]
