@@ -292,4 +292,12 @@ class MyPrompt(Cmd):
         except:
             print("The csv file has not the good format: ('subject,target,link' or 'subject,goal,link')")
 
+    def completedefault(self,text, line, begidx, endidx):
+        #nodes= d.sqlQuery("select subject from facts where subject like '"+text+"%' union select goal from facts where goal like '"+text+"%' and goal not like '% %';")
+        nodes= d.sqlQuery("select subject from facts where subject like '"+text+"%'")
+        tab= []
+        for n in nodes:
+            tab.append(n[0])
+        return tab
+
 MyPrompt().cmdloop()

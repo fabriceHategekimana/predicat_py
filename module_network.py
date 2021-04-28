@@ -36,5 +36,4 @@ def displayNetwork(tab):
 
     #net.barnes_hut(gravity=-20000, central_gravity=0.0, spring_length=73, spring_strength=0.01, damping=0.09, overlap=0)
     net.set_options('{ "manipulation": { "enabled": true }, "physics": { "enabled": false }, "interaction": { "multiselect": true, "navigationButtons": true }, "configure": { "enabled": true, "filter": "layout,physics", "showButton": true }, "edges": { "smooth": { "enabled": false } } }')
-    #net.show_buttons(filter_=["layout", "manipulation", "physics"])
     net.show("network.html")
