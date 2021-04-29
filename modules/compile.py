@@ -2,13 +2,9 @@ import ply.lex as lex
 import ply.yacc as yacc
 import math as m
 import csv
-from module_union import *
-from module_db import *
-from module_propagation import *
 
 typeTable= {}
 VALUES= []
-d= Data()
 
 def writeCSV(tab, fname="res.txt"):
     with open(fname, 'w', newline='') as f:

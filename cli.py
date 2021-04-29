@@ -1,6 +1,8 @@
 from cmd import Cmd
-from module_compile import *
-from module_network import *
+from modules.compile import *
+from modules.network import *
+from modules.db import *
+from modules.propagation import *
 import re
 import csv
 
@@ -12,6 +14,7 @@ class MyPrompt(Cmd):
     mode = "normal"
     p = re.compile(r'\d+')
     COMPLETIONLIST= []
+    d= Data()
 
     def do_exit(self, inp):
         return True
@@ -32,7 +35,7 @@ class MyPrompt(Cmd):
         res= self.parserFormat(predicatQuery)
         if res.find("&") != 0: #s'il n'y a pas d'erreur
             sql= union(res)
-            res2= d.sqlQuery(sql)
+            res2= self.d.sqlQuery(sql)
         else:
             res2= res[1:]
         return res2
@@ -42,11 +45,11 @@ class MyPrompt(Cmd):
             tab= inp.split(" ")
             title= tab.pop(0)
             if title == "nodes":
-                print(d.sqlQuery("select distinct subject from facts union select distinct goal from facts;"))
+                print(self.d.sqlQuery("select distinct subject from facts union select distinct goal from facts;"))
             elif title == "links":
-                print(d.sqlQuery("select distinct link from facts;"))
+                print(self.d.sqlQuery("select distinct link from facts;"))
             elif title == "rules":
-                print(d.sqlQuery("select * from rules;"))
+                print(self.d.sqlQuery("select * from rules;"))
             else:
                 print(self.getTable("check "+inp))
         elif self.mode == "union":
@@ -65,11 +68,11 @@ class MyPrompt(Cmd):
             if res.find("&") != 0:
                 if res.find("&&rule&&") > -1: # if it's a rule
                     tab= res.split("&&rule&&")
-                    d.sqlModify("insert or ignore into rules (premises, conclusion) values (\"%s\", \"%s\")" % tuple(tab))
+                    self.d.sqlModify("insert or ignore into rules (premises, conclusion) values (\"%s\", \"%s\")" % tuple(tab))
                     retroPropagation(tab)
                 else:
                     tab= res.split("&&")
-                    d.sqlModify("insert or ignore into facts (subject, link, goal) values (\"%s\", \"%s\", \"%s\")" % tuple(tab))
+                    self.d.sqlModify("insert or ignore into facts (subject, link, goal) values (\"%s\", \"%s\", \"%s\")" % tuple(tab))
                     if res.find(" ") == -1: # if there isn't any string in the goal
                         propagation(" ".join(tab))
             else:
@@ -79,11 +82,11 @@ class MyPrompt(Cmd):
             print(res)
 
     def do_rules(self, inp):
-        res= d.sqlQuery("select * from rules;")
+        res= self.d.sqlQuery("select * from rules;")
         print(res)
 
     def do_links(self, inp):
-        res= d.sqlQuery("select distinct link from facts;")
+        res= self.d.sqlQuery("select distinct link from facts;")
         print(res)
 
     def myStr(self, num):
@@ -113,18 +116,18 @@ class MyPrompt(Cmd):
                 res =self.parserFormat("add "+fact)
                 tab= res.split("&&")
                 print("tab:", tab)
-                d.sqlModify("insert or ignore into facts (subject, link, goal) values (\"%s\", \"%s\", \"%s\")" % tuple(tab))
+                self.d.sqlModify("insert or ignore into facts (subject, link, goal) values (\"%s\", \"%s\", \"%s\")" % tuple(tab))
 
     def do_apply(self, inp):
         tab= inp.split(" ")
         if len(tab) >= 2:
             if tab[0] == "rules":
-                res= d.sqlQuery("select * from rules where id in ("+",".join(tab[1:])+");")
+                res= self.d.sqlQuery("select * from rules where id in ("+",".join(tab[1:])+");")
             else:
                 print("Error bad syntax")
         elif len(tab) == 1:
             if tab[0] == "rules":
-                res= d.sqlQuery("select * from rules;")
+                res= self.d.sqlQuery("select * from rules;")
         print("rules selected: ", res)
         for r in res:
             retroPropagation(r[1:])
@@ -155,10 +158,10 @@ class MyPrompt(Cmd):
         self.fromCSV(inp) 
 
     def do_clear(self, inp):
-        d.sqlModify("delete from facts")
+        self.d.sqlModify("delete from facts")
         tab= inp.split(" ")
         if len(tab) == 2 and tab[1] == "all":
-            d.sqlModify("delete from rules")
+            self.d.sqlModify("delete from rules")
         print("database cleared!")
 
     def do_rename(self, inp):
@@ -166,10 +169,10 @@ class MyPrompt(Cmd):
         tab= inp.split(" ")
         if len(tab) == 3:
             if tab[0] == "nodes":
-                d.sqlModify("update facts set subject='"+tab[2]+"' where subject='"+tab[1]+"'")
-                d.sqlModify("update facts set goal='"+tab[2]+"' where goal='"+tab[1]+"'")
+                self.d.sqlModify("update facts set subject='"+tab[2]+"' where subject='"+tab[1]+"'")
+                self.d.sqlModify("update facts set goal='"+tab[2]+"' where goal='"+tab[1]+"'")
             elif tab[0] == "links":
-                d.sqlModify("update facts set link='"+tab[2]+"' where link='"+tab[1]+"'")
+                self.d.sqlModify("update facts set link='"+tab[2]+"' where link='"+tab[1]+"'")
             else:
                 print("Bad syntax. It should be: 'rename [target] [oldname] [newname]")
                 print("[target]= nodes or links")
@@ -238,16 +241,16 @@ class MyPrompt(Cmd):
             facts= self.getFacts(tab,predicat)
             for fact in facts:
                 sql= "delete from facts where subject='%s' and link='%s' and goal='%s'" % tuple(fact)
-                d.sqlModify(sql)
+                self.d.sqlModify(sql)
 
 
     def deleteRules(self, numbers):
         print("delete ("+numbers+")")
-        d.sqlQuery("delete from rules where id in ("+numbers+")")
+        self.d.sqlQuery("delete from rules where id in ("+numbers+")")
 
     def sql(self,inp):
         try:
-            print(d.sqlQuery(inp))
+            print(self.d.sqlQuery(inp))
         except:
             print("Error this is not a sql query")
 
@@ -266,10 +269,10 @@ class MyPrompt(Cmd):
 
     def toCSV(self, name, csvFormat):
         if csvFormat == "gephy":
-            tab= d.sqlQuery("select subject,goal,link from facts;")
+            tab= self.d.sqlQuery("select subject,goal,link from facts;")
             tab.insert(0, ["source","target","link"])
         else:
-            tab= d.sqlQuery("select * from facts;")
+            tab= self.d.sqlQuery("select * from facts;")
             tab.insert(0, ["subject","link","goal"])
         with open(name, 'w', newline='') as f:
             writer = csv.writer(f)
@@ -293,8 +296,7 @@ class MyPrompt(Cmd):
             print("The csv file has not the good format: ('subject,target,link' or 'subject,goal,link')")
 
     def completedefault(self,text, line, begidx, endidx):
-        #nodes= d.sqlQuery("select subject from facts where subject like '"+text+"%' union select goal from facts where goal like '"+text+"%' and goal not like '% %';")
-        nodes= d.sqlQuery("select subject from facts where subject like '"+text+"%'")
+        nodes= self.d.sqlQuery("select subject from facts where subject like '"+text+"%' union select goal from facts where goal like '"+text+"%' and goal not like '% %';")
         tab= []
         for n in nodes:
             tab.append(n[0])

@@ -1,5 +1,5 @@
-from module_union import *
-from module_db import *
+from modules.union import *
+#from db import *
 
 def complete(exp, varList, value):
     for i in range(len(varList)):
