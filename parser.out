@@ -1,0 +1,2599 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    PRED
+
+Grammar
+
+Rule 0     S' -> exp
+Rule 1     exp -> cmds
+Rule 2     exp -> type
+Rule 3     exp -> comparators
+Rule 4     exp -> csvfile
+Rule 5     exp -> pred
+Rule 6     cmds -> cmd mcmd
+Rule 7     mcmd -> <empty>
+Rule 8     mcmd -> cmd mcmd
+Rule 9     cmd -> CHECK type
+Rule 10    cmd -> CHECKFROM name_type
+Rule 11    cmd -> ADD type
+Rule 12    cmd -> DELETE type
+Rule 13    cmd -> FILTER comparators
+Rule 14    cmd -> CSV csvfile
+Rule 15    cmd -> DISPLAY content
+Rule 16    cmd -> PRINT STRING
+Rule 17    cmd -> COUNT compnextelement
+Rule 18    cmd -> SELECT variables
+Rule 19    cmd -> REFERENCE element
+Rule 20    cmd -> RENAME args
+Rule 21    content -> type
+Rule 22    content -> <empty>
+Rule 23    comparators -> comparator conjcomparator
+Rule 24    comparator -> variable compnext
+Rule 25    comparator -> element compnext
+Rule 26    compnext -> symbol variable
+Rule 27    compnext -> symbol element
+Rule 28    compnextelement -> symbol element
+Rule 29    conjcomparator -> AND comparator conjcomparator
+Rule 30    conjcomparator -> <empty>
+Rule 31    symbol -> EQUAL EQUAL
+Rule 32    symbol -> INF EQUAL
+Rule 33    symbol -> SUP EQUAL
+Rule 34    symbol -> INF
+Rule 35    symbol -> SUP
+Rule 36    symbol -> STRINGEQUAL
+Rule 37    symbol -> STRINGNOTEQUAL
+Rule 38    symbol -> STRINGCONTAINS
+Rule 39    type -> element
+Rule 40    type -> variable
+Rule 41    type -> fact
+Rule 42    type -> set
+Rule 43    variable -> VAR
+Rule 44    element -> NUMBER
+Rule 45    element -> NAME
+Rule 46    element -> STRING
+Rule 47    fact -> element element element
+Rule 48    set -> set_fact conjset
+Rule 49    set_fact -> set_fact_classic
+Rule 50    set_fact -> set_fact_with_not
+Rule 51    set_fact -> fact
+Rule 52    set_fact_classic -> set_element set_element set_element
+Rule 53    set_fact_classic -> element element VAR
+Rule 54    set_fact_with_not -> NOT set_element set_element set_element
+Rule 55    set_fact_with_not -> set_element NOT set_element set_element
+Rule 56    set_fact_with_not -> set_element set_element NOT set_element
+Rule 57    set_fact_with_not -> set_element set_element set_element NOT
+Rule 58    set_fact_with_not -> element element set_element NOT
+Rule 59    set_fact_with_not -> element element NOT set_element
+Rule 60    set_element -> element
+Rule 61    set_element -> VAR
+Rule 62    conjset -> <empty>
+Rule 63    conjset -> AND set_fact conjset
+Rule 64    csvfile -> NAME DOT CSV
+Rule 65    pred -> NAME DOT PREDEXT
+Rule 66    name_type -> NAME type
+Rule 67    variables -> VAR
+Rule 68    variables -> VAR morevariables
+Rule 69    morevariables -> VAR morevariables
+Rule 70    morevariables -> VAR
+Rule 71    args -> element
+Rule 72    args -> element moreargs
+Rule 73    moreargs -> element moreargs
+Rule 74    moreargs -> element
+
+Terminals, with rules where they appear
+
+ADD                  : 11
+AND                  : 29 63
+CHECK                : 9
+CHECKFROM            : 10
+COUNT                : 17
+CSV                  : 14 64
+DELETE               : 12
+DISPLAY              : 15
+DOT                  : 64 65
+EQUAL                : 31 31 32 33
+FILTER               : 13
+INF                  : 32 34
+NAME                 : 45 64 65 66
+NOT                  : 54 55 56 57 58 59
+NUMBER               : 44
+PRED                 : 
+PREDEXT              : 65
+PRINT                : 16
+REFERENCE            : 19
+RENAME               : 20
+SELECT               : 18
+STRING               : 16 46
+STRINGCONTAINS       : 38
+STRINGEQUAL          : 36
+STRINGNOTEQUAL       : 37
+SUP                  : 33 35
+VAR                  : 43 53 61 67 68 69 70
+error                : 
+
+Nonterminals, with rules where they appear
+
+args                 : 20
+cmd                  : 6 8
+cmds                 : 1
+comparator           : 23 29
+comparators          : 3 13
+compnext             : 24 25
+compnextelement      : 17
+conjcomparator       : 23 29
+conjset              : 48 63
+content              : 15
+csvfile              : 4 14
+element              : 19 25 27 28 39 47 47 47 53 53 58 58 59 59 60 71 72 73 74
+exp                  : 0
+fact                 : 41 51
+mcmd                 : 6 8
+moreargs             : 72 73
+morevariables        : 68 69
+name_type            : 10
+pred                 : 5
+set                  : 42
+set_element          : 52 52 52 54 54 54 55 55 55 56 56 56 57 57 57 58 59
+set_fact             : 48 63
+set_fact_classic     : 49
+set_fact_with_not    : 50
+symbol               : 26 27 28
+type                 : 2 9 11 12 21 66
+variable             : 24 26 40
+variables            : 18
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . exp
+    (1) exp -> . cmds
+    (2) exp -> . type
+    (3) exp -> . comparators
+    (4) exp -> . csvfile
+    (5) exp -> . pred
+    (6) cmds -> . cmd mcmd
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (23) comparators -> . comparator conjcomparator
+    (64) csvfile -> . NAME DOT CSV
+    (65) pred -> . NAME DOT PREDEXT
+    (9) cmd -> . CHECK type
+    (10) cmd -> . CHECKFROM name_type
+    (11) cmd -> . ADD type
+    (12) cmd -> . DELETE type
+    (13) cmd -> . FILTER comparators
+    (14) cmd -> . CSV csvfile
+    (15) cmd -> . DISPLAY content
+    (16) cmd -> . PRINT STRING
+    (17) cmd -> . COUNT compnextelement
+    (18) cmd -> . SELECT variables
+    (19) cmd -> . REFERENCE element
+    (20) cmd -> . RENAME args
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (24) comparator -> . variable compnext
+    (25) comparator -> . element compnext
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    NAME            shift and go to state 13
+    CHECK           shift and go to state 15
+    CHECKFROM       shift and go to state 16
+    ADD             shift and go to state 17
+    DELETE          shift and go to state 18
+    FILTER          shift and go to state 19
+    CSV             shift and go to state 14
+    DISPLAY         shift and go to state 20
+    PRINT           shift and go to state 21
+    COUNT           shift and go to state 23
+    SELECT          shift and go to state 24
+    REFERENCE       shift and go to state 25
+    RENAME          shift and go to state 26
+    NUMBER          shift and go to state 27
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    exp                            shift and go to state 1
+    cmds                           shift and go to state 2
+    type                           shift and go to state 3
+    comparators                    shift and go to state 4
+    csvfile                        shift and go to state 5
+    pred                           shift and go to state 6
+    cmd                            shift and go to state 7
+    element                        shift and go to state 8
+    variable                       shift and go to state 9
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    comparator                     shift and go to state 12
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 1
+
+    (0) S' -> exp .
+
+
+
+state 2
+
+    (1) exp -> cmds .
+
+    $end            reduce using rule 1 (exp -> cmds .)
+
+
+state 3
+
+    (2) exp -> type .
+
+    $end            reduce using rule 2 (exp -> type .)
+
+
+state 4
+
+    (3) exp -> comparators .
+
+    $end            reduce using rule 3 (exp -> comparators .)
+
+
+state 5
+
+    (4) exp -> csvfile .
+
+    $end            reduce using rule 4 (exp -> csvfile .)
+
+
+state 6
+
+    (5) exp -> pred .
+
+    $end            reduce using rule 5 (exp -> pred .)
+
+
+state 7
+
+    (6) cmds -> cmd . mcmd
+    (7) mcmd -> .
+    (8) mcmd -> . cmd mcmd
+    (9) cmd -> . CHECK type
+    (10) cmd -> . CHECKFROM name_type
+    (11) cmd -> . ADD type
+    (12) cmd -> . DELETE type
+    (13) cmd -> . FILTER comparators
+    (14) cmd -> . CSV csvfile
+    (15) cmd -> . DISPLAY content
+    (16) cmd -> . PRINT STRING
+    (17) cmd -> . COUNT compnextelement
+    (18) cmd -> . SELECT variables
+    (19) cmd -> . REFERENCE element
+    (20) cmd -> . RENAME args
+
+    $end            reduce using rule 7 (mcmd -> .)
+    CHECK           shift and go to state 15
+    CHECKFROM       shift and go to state 16
+    ADD             shift and go to state 17
+    DELETE          shift and go to state 18
+    FILTER          shift and go to state 19
+    CSV             shift and go to state 14
+    DISPLAY         shift and go to state 20
+    PRINT           shift and go to state 21
+    COUNT           shift and go to state 23
+    SELECT          shift and go to state 24
+    REFERENCE       shift and go to state 25
+    RENAME          shift and go to state 26
+
+    cmd                            shift and go to state 34
+    mcmd                           shift and go to state 35
+
+state 8
+
+    (39) type -> element .
+    (47) fact -> element . element element
+    (25) comparator -> element . compnext
+    (53) set_fact_classic -> element . element VAR
+    (58) set_fact_with_not -> element . element set_element NOT
+    (59) set_fact_with_not -> element . element NOT set_element
+    (60) set_element -> element .
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (26) compnext -> . symbol variable
+    (27) compnext -> . symbol element
+    (31) symbol -> . EQUAL EQUAL
+    (32) symbol -> . INF EQUAL
+    (33) symbol -> . SUP EQUAL
+    (34) symbol -> . INF
+    (35) symbol -> . SUP
+    (36) symbol -> . STRINGEQUAL
+    (37) symbol -> . STRINGNOTEQUAL
+    (38) symbol -> . STRINGCONTAINS
+
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+    $end            reduce using rule 39 (type -> element .)
+    NOT             reduce using rule 60 (set_element -> element .)
+    VAR             reduce using rule 60 (set_element -> element .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    EQUAL           shift and go to state 40
+    INF             shift and go to state 41
+    SUP             shift and go to state 42
+    STRINGEQUAL     shift and go to state 43
+    STRINGNOTEQUAL  shift and go to state 44
+    STRINGCONTAINS  shift and go to state 45
+
+  ! NUMBER          [ reduce using rule 60 (set_element -> element .) ]
+  ! NAME            [ reduce using rule 60 (set_element -> element .) ]
+  ! STRING          [ reduce using rule 60 (set_element -> element .) ]
+
+    element                        shift and go to state 36
+    compnext                       shift and go to state 37
+    symbol                         shift and go to state 39
+
+state 9
+
+    (40) type -> variable .
+    (24) comparator -> variable . compnext
+    (26) compnext -> . symbol variable
+    (27) compnext -> . symbol element
+    (31) symbol -> . EQUAL EQUAL
+    (32) symbol -> . INF EQUAL
+    (33) symbol -> . SUP EQUAL
+    (34) symbol -> . INF
+    (35) symbol -> . SUP
+    (36) symbol -> . STRINGEQUAL
+    (37) symbol -> . STRINGNOTEQUAL
+    (38) symbol -> . STRINGCONTAINS
+
+    $end            reduce using rule 40 (type -> variable .)
+    EQUAL           shift and go to state 40
+    INF             shift and go to state 41
+    SUP             shift and go to state 42
+    STRINGEQUAL     shift and go to state 43
+    STRINGNOTEQUAL  shift and go to state 44
+    STRINGCONTAINS  shift and go to state 45
+
+    compnext                       shift and go to state 46
+    symbol                         shift and go to state 39
+
+state 10
+
+    (41) type -> fact .
+    (51) set_fact -> fact .
+
+  ! reduce/reduce conflict for $end resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for CHECK resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for CHECKFROM resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for ADD resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for DELETE resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for FILTER resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for CSV resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for DISPLAY resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for PRINT resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for COUNT resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for SELECT resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for REFERENCE resolved using rule 41 (type -> fact .)
+  ! reduce/reduce conflict for RENAME resolved using rule 41 (type -> fact .)
+    $end            reduce using rule 41 (type -> fact .)
+    CHECK           reduce using rule 41 (type -> fact .)
+    CHECKFROM       reduce using rule 41 (type -> fact .)
+    ADD             reduce using rule 41 (type -> fact .)
+    DELETE          reduce using rule 41 (type -> fact .)
+    FILTER          reduce using rule 41 (type -> fact .)
+    CSV             reduce using rule 41 (type -> fact .)
+    DISPLAY         reduce using rule 41 (type -> fact .)
+    PRINT           reduce using rule 41 (type -> fact .)
+    COUNT           reduce using rule 41 (type -> fact .)
+    SELECT          reduce using rule 41 (type -> fact .)
+    REFERENCE       reduce using rule 41 (type -> fact .)
+    RENAME          reduce using rule 41 (type -> fact .)
+    AND             reduce using rule 51 (set_fact -> fact .)
+
+  ! $end            [ reduce using rule 51 (set_fact -> fact .) ]
+  ! CHECK           [ reduce using rule 51 (set_fact -> fact .) ]
+  ! CHECKFROM       [ reduce using rule 51 (set_fact -> fact .) ]
+  ! ADD             [ reduce using rule 51 (set_fact -> fact .) ]
+  ! DELETE          [ reduce using rule 51 (set_fact -> fact .) ]
+  ! FILTER          [ reduce using rule 51 (set_fact -> fact .) ]
+  ! CSV             [ reduce using rule 51 (set_fact -> fact .) ]
+  ! DISPLAY         [ reduce using rule 51 (set_fact -> fact .) ]
+  ! PRINT           [ reduce using rule 51 (set_fact -> fact .) ]
+  ! COUNT           [ reduce using rule 51 (set_fact -> fact .) ]
+  ! SELECT          [ reduce using rule 51 (set_fact -> fact .) ]
+  ! REFERENCE       [ reduce using rule 51 (set_fact -> fact .) ]
+  ! RENAME          [ reduce using rule 51 (set_fact -> fact .) ]
+
+
+state 11
+
+    (42) type -> set .
+
+    $end            reduce using rule 42 (type -> set .)
+    CHECK           reduce using rule 42 (type -> set .)
+    CHECKFROM       reduce using rule 42 (type -> set .)
+    ADD             reduce using rule 42 (type -> set .)
+    DELETE          reduce using rule 42 (type -> set .)
+    FILTER          reduce using rule 42 (type -> set .)
+    CSV             reduce using rule 42 (type -> set .)
+    DISPLAY         reduce using rule 42 (type -> set .)
+    PRINT           reduce using rule 42 (type -> set .)
+    COUNT           reduce using rule 42 (type -> set .)
+    SELECT          reduce using rule 42 (type -> set .)
+    REFERENCE       reduce using rule 42 (type -> set .)
+    RENAME          reduce using rule 42 (type -> set .)
+
+
+state 12
+
+    (23) comparators -> comparator . conjcomparator
+    (29) conjcomparator -> . AND comparator conjcomparator
+    (30) conjcomparator -> .
+
+    AND             shift and go to state 48
+    $end            reduce using rule 30 (conjcomparator -> .)
+    CHECK           reduce using rule 30 (conjcomparator -> .)
+    CHECKFROM       reduce using rule 30 (conjcomparator -> .)
+    ADD             reduce using rule 30 (conjcomparator -> .)
+    DELETE          reduce using rule 30 (conjcomparator -> .)
+    FILTER          reduce using rule 30 (conjcomparator -> .)
+    CSV             reduce using rule 30 (conjcomparator -> .)
+    DISPLAY         reduce using rule 30 (conjcomparator -> .)
+    PRINT           reduce using rule 30 (conjcomparator -> .)
+    COUNT           reduce using rule 30 (conjcomparator -> .)
+    SELECT          reduce using rule 30 (conjcomparator -> .)
+    REFERENCE       reduce using rule 30 (conjcomparator -> .)
+    RENAME          reduce using rule 30 (conjcomparator -> .)
+
+    conjcomparator                 shift and go to state 47
+
+state 13
+
+    (64) csvfile -> NAME . DOT CSV
+    (65) pred -> NAME . DOT PREDEXT
+    (45) element -> NAME .
+
+    DOT             shift and go to state 49
+    NUMBER          reduce using rule 45 (element -> NAME .)
+    NAME            reduce using rule 45 (element -> NAME .)
+    STRING          reduce using rule 45 (element -> NAME .)
+    EQUAL           reduce using rule 45 (element -> NAME .)
+    INF             reduce using rule 45 (element -> NAME .)
+    SUP             reduce using rule 45 (element -> NAME .)
+    STRINGEQUAL     reduce using rule 45 (element -> NAME .)
+    STRINGNOTEQUAL  reduce using rule 45 (element -> NAME .)
+    STRINGCONTAINS  reduce using rule 45 (element -> NAME .)
+    $end            reduce using rule 45 (element -> NAME .)
+    NOT             reduce using rule 45 (element -> NAME .)
+    VAR             reduce using rule 45 (element -> NAME .)
+
+
+state 14
+
+    (14) cmd -> CSV . csvfile
+    (64) csvfile -> . NAME DOT CSV
+
+    NAME            shift and go to state 51
+
+    csvfile                        shift and go to state 50
+
+state 15
+
+    (9) cmd -> CHECK . type
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    type                           shift and go to state 52
+    element                        shift and go to state 53
+    variable                       shift and go to state 54
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 16
+
+    (10) cmd -> CHECKFROM . name_type
+    (66) name_type -> . NAME type
+
+    NAME            shift and go to state 56
+
+    name_type                      shift and go to state 55
+
+state 17
+
+    (11) cmd -> ADD . type
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    type                           shift and go to state 57
+    element                        shift and go to state 53
+    variable                       shift and go to state 54
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 18
+
+    (12) cmd -> DELETE . type
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    type                           shift and go to state 58
+    element                        shift and go to state 53
+    variable                       shift and go to state 54
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 19
+
+    (13) cmd -> FILTER . comparators
+    (23) comparators -> . comparator conjcomparator
+    (24) comparator -> . variable compnext
+    (25) comparator -> . element compnext
+    (43) variable -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 62
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    comparators                    shift and go to state 59
+    comparator                     shift and go to state 12
+    variable                       shift and go to state 60
+    element                        shift and go to state 61
+
+state 20
+
+    (15) cmd -> DISPLAY . content
+    (21) content -> . type
+    (22) content -> .
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    CHECK           reduce using rule 22 (content -> .)
+    CHECKFROM       reduce using rule 22 (content -> .)
+    ADD             reduce using rule 22 (content -> .)
+    DELETE          reduce using rule 22 (content -> .)
+    FILTER          reduce using rule 22 (content -> .)
+    CSV             reduce using rule 22 (content -> .)
+    DISPLAY         reduce using rule 22 (content -> .)
+    PRINT           reduce using rule 22 (content -> .)
+    COUNT           reduce using rule 22 (content -> .)
+    SELECT          reduce using rule 22 (content -> .)
+    REFERENCE       reduce using rule 22 (content -> .)
+    RENAME          reduce using rule 22 (content -> .)
+    $end            reduce using rule 22 (content -> .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    content                        shift and go to state 63
+    type                           shift and go to state 64
+    element                        shift and go to state 53
+    variable                       shift and go to state 54
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 21
+
+    (16) cmd -> PRINT . STRING
+
+    STRING          shift and go to state 65
+
+
+state 22
+
+    (46) element -> STRING .
+
+    NUMBER          reduce using rule 46 (element -> STRING .)
+    NAME            reduce using rule 46 (element -> STRING .)
+    STRING          reduce using rule 46 (element -> STRING .)
+    EQUAL           reduce using rule 46 (element -> STRING .)
+    INF             reduce using rule 46 (element -> STRING .)
+    SUP             reduce using rule 46 (element -> STRING .)
+    STRINGEQUAL     reduce using rule 46 (element -> STRING .)
+    STRINGNOTEQUAL  reduce using rule 46 (element -> STRING .)
+    STRINGCONTAINS  reduce using rule 46 (element -> STRING .)
+    $end            reduce using rule 46 (element -> STRING .)
+    NOT             reduce using rule 46 (element -> STRING .)
+    VAR             reduce using rule 46 (element -> STRING .)
+    CHECK           reduce using rule 46 (element -> STRING .)
+    CHECKFROM       reduce using rule 46 (element -> STRING .)
+    ADD             reduce using rule 46 (element -> STRING .)
+    DELETE          reduce using rule 46 (element -> STRING .)
+    FILTER          reduce using rule 46 (element -> STRING .)
+    CSV             reduce using rule 46 (element -> STRING .)
+    DISPLAY         reduce using rule 46 (element -> STRING .)
+    PRINT           reduce using rule 46 (element -> STRING .)
+    COUNT           reduce using rule 46 (element -> STRING .)
+    SELECT          reduce using rule 46 (element -> STRING .)
+    REFERENCE       reduce using rule 46 (element -> STRING .)
+    RENAME          reduce using rule 46 (element -> STRING .)
+    AND             reduce using rule 46 (element -> STRING .)
+
+
+state 23
+
+    (17) cmd -> COUNT . compnextelement
+    (28) compnextelement -> . symbol element
+    (31) symbol -> . EQUAL EQUAL
+    (32) symbol -> . INF EQUAL
+    (33) symbol -> . SUP EQUAL
+    (34) symbol -> . INF
+    (35) symbol -> . SUP
+    (36) symbol -> . STRINGEQUAL
+    (37) symbol -> . STRINGNOTEQUAL
+    (38) symbol -> . STRINGCONTAINS
+
+    EQUAL           shift and go to state 40
+    INF             shift and go to state 41
+    SUP             shift and go to state 42
+    STRINGEQUAL     shift and go to state 43
+    STRINGNOTEQUAL  shift and go to state 44
+    STRINGCONTAINS  shift and go to state 45
+
+    compnextelement                shift and go to state 66
+    symbol                         shift and go to state 67
+
+state 24
+
+    (18) cmd -> SELECT . variables
+    (67) variables -> . VAR
+    (68) variables -> . VAR morevariables
+
+    VAR             shift and go to state 69
+
+    variables                      shift and go to state 68
+
+state 25
+
+    (19) cmd -> REFERENCE . element
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 70
+
+state 26
+
+    (20) cmd -> RENAME . args
+    (71) args -> . element
+    (72) args -> . element moreargs
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    args                           shift and go to state 71
+    element                        shift and go to state 72
+
+state 27
+
+    (44) element -> NUMBER .
+
+    NUMBER          reduce using rule 44 (element -> NUMBER .)
+    NAME            reduce using rule 44 (element -> NUMBER .)
+    STRING          reduce using rule 44 (element -> NUMBER .)
+    EQUAL           reduce using rule 44 (element -> NUMBER .)
+    INF             reduce using rule 44 (element -> NUMBER .)
+    SUP             reduce using rule 44 (element -> NUMBER .)
+    STRINGEQUAL     reduce using rule 44 (element -> NUMBER .)
+    STRINGNOTEQUAL  reduce using rule 44 (element -> NUMBER .)
+    STRINGCONTAINS  reduce using rule 44 (element -> NUMBER .)
+    $end            reduce using rule 44 (element -> NUMBER .)
+    NOT             reduce using rule 44 (element -> NUMBER .)
+    VAR             reduce using rule 44 (element -> NUMBER .)
+    CHECK           reduce using rule 44 (element -> NUMBER .)
+    CHECKFROM       reduce using rule 44 (element -> NUMBER .)
+    ADD             reduce using rule 44 (element -> NUMBER .)
+    DELETE          reduce using rule 44 (element -> NUMBER .)
+    FILTER          reduce using rule 44 (element -> NUMBER .)
+    CSV             reduce using rule 44 (element -> NUMBER .)
+    DISPLAY         reduce using rule 44 (element -> NUMBER .)
+    PRINT           reduce using rule 44 (element -> NUMBER .)
+    COUNT           reduce using rule 44 (element -> NUMBER .)
+    SELECT          reduce using rule 44 (element -> NUMBER .)
+    REFERENCE       reduce using rule 44 (element -> NUMBER .)
+    RENAME          reduce using rule 44 (element -> NUMBER .)
+    AND             reduce using rule 44 (element -> NUMBER .)
+
+
+state 28
+
+    (43) variable -> VAR .
+    (61) set_element -> VAR .
+
+    EQUAL           reduce using rule 43 (variable -> VAR .)
+    INF             reduce using rule 43 (variable -> VAR .)
+    SUP             reduce using rule 43 (variable -> VAR .)
+    STRINGEQUAL     reduce using rule 43 (variable -> VAR .)
+    STRINGNOTEQUAL  reduce using rule 43 (variable -> VAR .)
+    STRINGCONTAINS  reduce using rule 43 (variable -> VAR .)
+    $end            reduce using rule 43 (variable -> VAR .)
+    CHECK           reduce using rule 43 (variable -> VAR .)
+    CHECKFROM       reduce using rule 43 (variable -> VAR .)
+    ADD             reduce using rule 43 (variable -> VAR .)
+    DELETE          reduce using rule 43 (variable -> VAR .)
+    FILTER          reduce using rule 43 (variable -> VAR .)
+    CSV             reduce using rule 43 (variable -> VAR .)
+    DISPLAY         reduce using rule 43 (variable -> VAR .)
+    PRINT           reduce using rule 43 (variable -> VAR .)
+    COUNT           reduce using rule 43 (variable -> VAR .)
+    SELECT          reduce using rule 43 (variable -> VAR .)
+    REFERENCE       reduce using rule 43 (variable -> VAR .)
+    RENAME          reduce using rule 43 (variable -> VAR .)
+    NOT             reduce using rule 61 (set_element -> VAR .)
+    VAR             reduce using rule 61 (set_element -> VAR .)
+    NUMBER          reduce using rule 61 (set_element -> VAR .)
+    NAME            reduce using rule 61 (set_element -> VAR .)
+    STRING          reduce using rule 61 (set_element -> VAR .)
+
+
+state 29
+
+    (48) set -> set_fact . conjset
+    (62) conjset -> .
+    (63) conjset -> . AND set_fact conjset
+
+    $end            reduce using rule 62 (conjset -> .)
+    CHECK           reduce using rule 62 (conjset -> .)
+    CHECKFROM       reduce using rule 62 (conjset -> .)
+    ADD             reduce using rule 62 (conjset -> .)
+    DELETE          reduce using rule 62 (conjset -> .)
+    FILTER          reduce using rule 62 (conjset -> .)
+    CSV             reduce using rule 62 (conjset -> .)
+    DISPLAY         reduce using rule 62 (conjset -> .)
+    PRINT           reduce using rule 62 (conjset -> .)
+    COUNT           reduce using rule 62 (conjset -> .)
+    SELECT          reduce using rule 62 (conjset -> .)
+    REFERENCE       reduce using rule 62 (conjset -> .)
+    RENAME          reduce using rule 62 (conjset -> .)
+    AND             shift and go to state 74
+
+    conjset                        shift and go to state 73
+
+state 30
+
+    (49) set_fact -> set_fact_classic .
+
+    AND             reduce using rule 49 (set_fact -> set_fact_classic .)
+    $end            reduce using rule 49 (set_fact -> set_fact_classic .)
+    CHECK           reduce using rule 49 (set_fact -> set_fact_classic .)
+    CHECKFROM       reduce using rule 49 (set_fact -> set_fact_classic .)
+    ADD             reduce using rule 49 (set_fact -> set_fact_classic .)
+    DELETE          reduce using rule 49 (set_fact -> set_fact_classic .)
+    FILTER          reduce using rule 49 (set_fact -> set_fact_classic .)
+    CSV             reduce using rule 49 (set_fact -> set_fact_classic .)
+    DISPLAY         reduce using rule 49 (set_fact -> set_fact_classic .)
+    PRINT           reduce using rule 49 (set_fact -> set_fact_classic .)
+    COUNT           reduce using rule 49 (set_fact -> set_fact_classic .)
+    SELECT          reduce using rule 49 (set_fact -> set_fact_classic .)
+    REFERENCE       reduce using rule 49 (set_fact -> set_fact_classic .)
+    RENAME          reduce using rule 49 (set_fact -> set_fact_classic .)
+
+
+state 31
+
+    (50) set_fact -> set_fact_with_not .
+
+    AND             reduce using rule 50 (set_fact -> set_fact_with_not .)
+    $end            reduce using rule 50 (set_fact -> set_fact_with_not .)
+    CHECK           reduce using rule 50 (set_fact -> set_fact_with_not .)
+    CHECKFROM       reduce using rule 50 (set_fact -> set_fact_with_not .)
+    ADD             reduce using rule 50 (set_fact -> set_fact_with_not .)
+    DELETE          reduce using rule 50 (set_fact -> set_fact_with_not .)
+    FILTER          reduce using rule 50 (set_fact -> set_fact_with_not .)
+    CSV             reduce using rule 50 (set_fact -> set_fact_with_not .)
+    DISPLAY         reduce using rule 50 (set_fact -> set_fact_with_not .)
+    PRINT           reduce using rule 50 (set_fact -> set_fact_with_not .)
+    COUNT           reduce using rule 50 (set_fact -> set_fact_with_not .)
+    SELECT          reduce using rule 50 (set_fact -> set_fact_with_not .)
+    REFERENCE       reduce using rule 50 (set_fact -> set_fact_with_not .)
+    RENAME          reduce using rule 50 (set_fact -> set_fact_with_not .)
+
+
+state 32
+
+    (52) set_fact_classic -> set_element . set_element set_element
+    (55) set_fact_with_not -> set_element . NOT set_element set_element
+    (56) set_fact_with_not -> set_element . set_element NOT set_element
+    (57) set_fact_with_not -> set_element . set_element set_element NOT
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NOT             shift and go to state 76
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 75
+    element                        shift and go to state 77
+
+state 33
+
+    (54) set_fact_with_not -> NOT . set_element set_element set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 79
+    element                        shift and go to state 77
+
+state 34
+
+    (8) mcmd -> cmd . mcmd
+    (7) mcmd -> .
+    (8) mcmd -> . cmd mcmd
+    (9) cmd -> . CHECK type
+    (10) cmd -> . CHECKFROM name_type
+    (11) cmd -> . ADD type
+    (12) cmd -> . DELETE type
+    (13) cmd -> . FILTER comparators
+    (14) cmd -> . CSV csvfile
+    (15) cmd -> . DISPLAY content
+    (16) cmd -> . PRINT STRING
+    (17) cmd -> . COUNT compnextelement
+    (18) cmd -> . SELECT variables
+    (19) cmd -> . REFERENCE element
+    (20) cmd -> . RENAME args
+
+    $end            reduce using rule 7 (mcmd -> .)
+    CHECK           shift and go to state 15
+    CHECKFROM       shift and go to state 16
+    ADD             shift and go to state 17
+    DELETE          shift and go to state 18
+    FILTER          shift and go to state 19
+    CSV             shift and go to state 14
+    DISPLAY         shift and go to state 20
+    PRINT           shift and go to state 21
+    COUNT           shift and go to state 23
+    SELECT          shift and go to state 24
+    REFERENCE       shift and go to state 25
+    RENAME          shift and go to state 26
+
+    cmd                            shift and go to state 34
+    mcmd                           shift and go to state 80
+
+state 35
+
+    (6) cmds -> cmd mcmd .
+
+    $end            reduce using rule 6 (cmds -> cmd mcmd .)
+
+
+state 36
+
+    (47) fact -> element element . element
+    (53) set_fact_classic -> element element . VAR
+    (58) set_fact_with_not -> element element . set_element NOT
+    (59) set_fact_with_not -> element element . NOT set_element
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    VAR             shift and go to state 82
+    NOT             shift and go to state 84
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 81
+    set_element                    shift and go to state 83
+
+state 37
+
+    (25) comparator -> element compnext .
+
+    AND             reduce using rule 25 (comparator -> element compnext .)
+    $end            reduce using rule 25 (comparator -> element compnext .)
+    CHECK           reduce using rule 25 (comparator -> element compnext .)
+    CHECKFROM       reduce using rule 25 (comparator -> element compnext .)
+    ADD             reduce using rule 25 (comparator -> element compnext .)
+    DELETE          reduce using rule 25 (comparator -> element compnext .)
+    FILTER          reduce using rule 25 (comparator -> element compnext .)
+    CSV             reduce using rule 25 (comparator -> element compnext .)
+    DISPLAY         reduce using rule 25 (comparator -> element compnext .)
+    PRINT           reduce using rule 25 (comparator -> element compnext .)
+    COUNT           reduce using rule 25 (comparator -> element compnext .)
+    SELECT          reduce using rule 25 (comparator -> element compnext .)
+    REFERENCE       reduce using rule 25 (comparator -> element compnext .)
+    RENAME          reduce using rule 25 (comparator -> element compnext .)
+
+
+state 38
+
+    (45) element -> NAME .
+
+    VAR             reduce using rule 45 (element -> NAME .)
+    NOT             reduce using rule 45 (element -> NAME .)
+    NUMBER          reduce using rule 45 (element -> NAME .)
+    NAME            reduce using rule 45 (element -> NAME .)
+    STRING          reduce using rule 45 (element -> NAME .)
+    CHECK           reduce using rule 45 (element -> NAME .)
+    CHECKFROM       reduce using rule 45 (element -> NAME .)
+    ADD             reduce using rule 45 (element -> NAME .)
+    DELETE          reduce using rule 45 (element -> NAME .)
+    FILTER          reduce using rule 45 (element -> NAME .)
+    CSV             reduce using rule 45 (element -> NAME .)
+    DISPLAY         reduce using rule 45 (element -> NAME .)
+    PRINT           reduce using rule 45 (element -> NAME .)
+    COUNT           reduce using rule 45 (element -> NAME .)
+    SELECT          reduce using rule 45 (element -> NAME .)
+    REFERENCE       reduce using rule 45 (element -> NAME .)
+    RENAME          reduce using rule 45 (element -> NAME .)
+    $end            reduce using rule 45 (element -> NAME .)
+    EQUAL           reduce using rule 45 (element -> NAME .)
+    INF             reduce using rule 45 (element -> NAME .)
+    SUP             reduce using rule 45 (element -> NAME .)
+    STRINGEQUAL     reduce using rule 45 (element -> NAME .)
+    STRINGNOTEQUAL  reduce using rule 45 (element -> NAME .)
+    STRINGCONTAINS  reduce using rule 45 (element -> NAME .)
+    AND             reduce using rule 45 (element -> NAME .)
+
+
+state 39
+
+    (26) compnext -> symbol . variable
+    (27) compnext -> symbol . element
+    (43) variable -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 62
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    variable                       shift and go to state 85
+    element                        shift and go to state 86
+
+state 40
+
+    (31) symbol -> EQUAL . EQUAL
+
+    EQUAL           shift and go to state 87
+
+
+state 41
+
+    (32) symbol -> INF . EQUAL
+    (34) symbol -> INF .
+
+    EQUAL           shift and go to state 88
+    VAR             reduce using rule 34 (symbol -> INF .)
+    NUMBER          reduce using rule 34 (symbol -> INF .)
+    NAME            reduce using rule 34 (symbol -> INF .)
+    STRING          reduce using rule 34 (symbol -> INF .)
+
+
+state 42
+
+    (33) symbol -> SUP . EQUAL
+    (35) symbol -> SUP .
+
+    EQUAL           shift and go to state 89
+    VAR             reduce using rule 35 (symbol -> SUP .)
+    NUMBER          reduce using rule 35 (symbol -> SUP .)
+    NAME            reduce using rule 35 (symbol -> SUP .)
+    STRING          reduce using rule 35 (symbol -> SUP .)
+
+
+state 43
+
+    (36) symbol -> STRINGEQUAL .
+
+    VAR             reduce using rule 36 (symbol -> STRINGEQUAL .)
+    NUMBER          reduce using rule 36 (symbol -> STRINGEQUAL .)
+    NAME            reduce using rule 36 (symbol -> STRINGEQUAL .)
+    STRING          reduce using rule 36 (symbol -> STRINGEQUAL .)
+
+
+state 44
+
+    (37) symbol -> STRINGNOTEQUAL .
+
+    VAR             reduce using rule 37 (symbol -> STRINGNOTEQUAL .)
+    NUMBER          reduce using rule 37 (symbol -> STRINGNOTEQUAL .)
+    NAME            reduce using rule 37 (symbol -> STRINGNOTEQUAL .)
+    STRING          reduce using rule 37 (symbol -> STRINGNOTEQUAL .)
+
+
+state 45
+
+    (38) symbol -> STRINGCONTAINS .
+
+    VAR             reduce using rule 38 (symbol -> STRINGCONTAINS .)
+    NUMBER          reduce using rule 38 (symbol -> STRINGCONTAINS .)
+    NAME            reduce using rule 38 (symbol -> STRINGCONTAINS .)
+    STRING          reduce using rule 38 (symbol -> STRINGCONTAINS .)
+
+
+state 46
+
+    (24) comparator -> variable compnext .
+
+    AND             reduce using rule 24 (comparator -> variable compnext .)
+    $end            reduce using rule 24 (comparator -> variable compnext .)
+    CHECK           reduce using rule 24 (comparator -> variable compnext .)
+    CHECKFROM       reduce using rule 24 (comparator -> variable compnext .)
+    ADD             reduce using rule 24 (comparator -> variable compnext .)
+    DELETE          reduce using rule 24 (comparator -> variable compnext .)
+    FILTER          reduce using rule 24 (comparator -> variable compnext .)
+    CSV             reduce using rule 24 (comparator -> variable compnext .)
+    DISPLAY         reduce using rule 24 (comparator -> variable compnext .)
+    PRINT           reduce using rule 24 (comparator -> variable compnext .)
+    COUNT           reduce using rule 24 (comparator -> variable compnext .)
+    SELECT          reduce using rule 24 (comparator -> variable compnext .)
+    REFERENCE       reduce using rule 24 (comparator -> variable compnext .)
+    RENAME          reduce using rule 24 (comparator -> variable compnext .)
+
+
+state 47
+
+    (23) comparators -> comparator conjcomparator .
+
+    $end            reduce using rule 23 (comparators -> comparator conjcomparator .)
+    CHECK           reduce using rule 23 (comparators -> comparator conjcomparator .)
+    CHECKFROM       reduce using rule 23 (comparators -> comparator conjcomparator .)
+    ADD             reduce using rule 23 (comparators -> comparator conjcomparator .)
+    DELETE          reduce using rule 23 (comparators -> comparator conjcomparator .)
+    FILTER          reduce using rule 23 (comparators -> comparator conjcomparator .)
+    CSV             reduce using rule 23 (comparators -> comparator conjcomparator .)
+    DISPLAY         reduce using rule 23 (comparators -> comparator conjcomparator .)
+    PRINT           reduce using rule 23 (comparators -> comparator conjcomparator .)
+    COUNT           reduce using rule 23 (comparators -> comparator conjcomparator .)
+    SELECT          reduce using rule 23 (comparators -> comparator conjcomparator .)
+    REFERENCE       reduce using rule 23 (comparators -> comparator conjcomparator .)
+    RENAME          reduce using rule 23 (comparators -> comparator conjcomparator .)
+
+
+state 48
+
+    (29) conjcomparator -> AND . comparator conjcomparator
+    (24) comparator -> . variable compnext
+    (25) comparator -> . element compnext
+    (43) variable -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 62
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    comparator                     shift and go to state 90
+    variable                       shift and go to state 60
+    element                        shift and go to state 61
+
+state 49
+
+    (64) csvfile -> NAME DOT . CSV
+    (65) pred -> NAME DOT . PREDEXT
+
+    CSV             shift and go to state 91
+    PREDEXT         shift and go to state 92
+
+
+state 50
+
+    (14) cmd -> CSV csvfile .
+
+    CHECK           reduce using rule 14 (cmd -> CSV csvfile .)
+    CHECKFROM       reduce using rule 14 (cmd -> CSV csvfile .)
+    ADD             reduce using rule 14 (cmd -> CSV csvfile .)
+    DELETE          reduce using rule 14 (cmd -> CSV csvfile .)
+    FILTER          reduce using rule 14 (cmd -> CSV csvfile .)
+    CSV             reduce using rule 14 (cmd -> CSV csvfile .)
+    DISPLAY         reduce using rule 14 (cmd -> CSV csvfile .)
+    PRINT           reduce using rule 14 (cmd -> CSV csvfile .)
+    COUNT           reduce using rule 14 (cmd -> CSV csvfile .)
+    SELECT          reduce using rule 14 (cmd -> CSV csvfile .)
+    REFERENCE       reduce using rule 14 (cmd -> CSV csvfile .)
+    RENAME          reduce using rule 14 (cmd -> CSV csvfile .)
+    $end            reduce using rule 14 (cmd -> CSV csvfile .)
+
+
+state 51
+
+    (64) csvfile -> NAME . DOT CSV
+
+    DOT             shift and go to state 93
+
+
+state 52
+
+    (9) cmd -> CHECK type .
+
+    CHECK           reduce using rule 9 (cmd -> CHECK type .)
+    CHECKFROM       reduce using rule 9 (cmd -> CHECK type .)
+    ADD             reduce using rule 9 (cmd -> CHECK type .)
+    DELETE          reduce using rule 9 (cmd -> CHECK type .)
+    FILTER          reduce using rule 9 (cmd -> CHECK type .)
+    CSV             reduce using rule 9 (cmd -> CHECK type .)
+    DISPLAY         reduce using rule 9 (cmd -> CHECK type .)
+    PRINT           reduce using rule 9 (cmd -> CHECK type .)
+    COUNT           reduce using rule 9 (cmd -> CHECK type .)
+    SELECT          reduce using rule 9 (cmd -> CHECK type .)
+    REFERENCE       reduce using rule 9 (cmd -> CHECK type .)
+    RENAME          reduce using rule 9 (cmd -> CHECK type .)
+    $end            reduce using rule 9 (cmd -> CHECK type .)
+
+
+state 53
+
+    (39) type -> element .
+    (47) fact -> element . element element
+    (53) set_fact_classic -> element . element VAR
+    (58) set_fact_with_not -> element . element set_element NOT
+    (59) set_fact_with_not -> element . element NOT set_element
+    (60) set_element -> element .
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+    CHECK           reduce using rule 39 (type -> element .)
+    CHECKFROM       reduce using rule 39 (type -> element .)
+    ADD             reduce using rule 39 (type -> element .)
+    DELETE          reduce using rule 39 (type -> element .)
+    FILTER          reduce using rule 39 (type -> element .)
+    CSV             reduce using rule 39 (type -> element .)
+    DISPLAY         reduce using rule 39 (type -> element .)
+    PRINT           reduce using rule 39 (type -> element .)
+    COUNT           reduce using rule 39 (type -> element .)
+    SELECT          reduce using rule 39 (type -> element .)
+    REFERENCE       reduce using rule 39 (type -> element .)
+    RENAME          reduce using rule 39 (type -> element .)
+    $end            reduce using rule 39 (type -> element .)
+    NOT             reduce using rule 60 (set_element -> element .)
+    VAR             reduce using rule 60 (set_element -> element .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+  ! NUMBER          [ reduce using rule 60 (set_element -> element .) ]
+  ! NAME            [ reduce using rule 60 (set_element -> element .) ]
+  ! STRING          [ reduce using rule 60 (set_element -> element .) ]
+
+    element                        shift and go to state 36
+
+state 54
+
+    (40) type -> variable .
+
+    CHECK           reduce using rule 40 (type -> variable .)
+    CHECKFROM       reduce using rule 40 (type -> variable .)
+    ADD             reduce using rule 40 (type -> variable .)
+    DELETE          reduce using rule 40 (type -> variable .)
+    FILTER          reduce using rule 40 (type -> variable .)
+    CSV             reduce using rule 40 (type -> variable .)
+    DISPLAY         reduce using rule 40 (type -> variable .)
+    PRINT           reduce using rule 40 (type -> variable .)
+    COUNT           reduce using rule 40 (type -> variable .)
+    SELECT          reduce using rule 40 (type -> variable .)
+    REFERENCE       reduce using rule 40 (type -> variable .)
+    RENAME          reduce using rule 40 (type -> variable .)
+    $end            reduce using rule 40 (type -> variable .)
+
+
+state 55
+
+    (10) cmd -> CHECKFROM name_type .
+
+    CHECK           reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    CHECKFROM       reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    ADD             reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    DELETE          reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    FILTER          reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    CSV             reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    DISPLAY         reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    PRINT           reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    COUNT           reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    SELECT          reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    REFERENCE       reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    RENAME          reduce using rule 10 (cmd -> CHECKFROM name_type .)
+    $end            reduce using rule 10 (cmd -> CHECKFROM name_type .)
+
+
+state 56
+
+    (66) name_type -> NAME . type
+    (39) type -> . element
+    (40) type -> . variable
+    (41) type -> . fact
+    (42) type -> . set
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+    (43) variable -> . VAR
+    (47) fact -> . element element element
+    (48) set -> . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+    VAR             shift and go to state 28
+    NOT             shift and go to state 33
+
+    type                           shift and go to state 94
+    element                        shift and go to state 53
+    variable                       shift and go to state 54
+    fact                           shift and go to state 10
+    set                            shift and go to state 11
+    set_fact                       shift and go to state 29
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    set_element                    shift and go to state 32
+
+state 57
+
+    (11) cmd -> ADD type .
+
+    CHECK           reduce using rule 11 (cmd -> ADD type .)
+    CHECKFROM       reduce using rule 11 (cmd -> ADD type .)
+    ADD             reduce using rule 11 (cmd -> ADD type .)
+    DELETE          reduce using rule 11 (cmd -> ADD type .)
+    FILTER          reduce using rule 11 (cmd -> ADD type .)
+    CSV             reduce using rule 11 (cmd -> ADD type .)
+    DISPLAY         reduce using rule 11 (cmd -> ADD type .)
+    PRINT           reduce using rule 11 (cmd -> ADD type .)
+    COUNT           reduce using rule 11 (cmd -> ADD type .)
+    SELECT          reduce using rule 11 (cmd -> ADD type .)
+    REFERENCE       reduce using rule 11 (cmd -> ADD type .)
+    RENAME          reduce using rule 11 (cmd -> ADD type .)
+    $end            reduce using rule 11 (cmd -> ADD type .)
+
+
+state 58
+
+    (12) cmd -> DELETE type .
+
+    CHECK           reduce using rule 12 (cmd -> DELETE type .)
+    CHECKFROM       reduce using rule 12 (cmd -> DELETE type .)
+    ADD             reduce using rule 12 (cmd -> DELETE type .)
+    DELETE          reduce using rule 12 (cmd -> DELETE type .)
+    FILTER          reduce using rule 12 (cmd -> DELETE type .)
+    CSV             reduce using rule 12 (cmd -> DELETE type .)
+    DISPLAY         reduce using rule 12 (cmd -> DELETE type .)
+    PRINT           reduce using rule 12 (cmd -> DELETE type .)
+    COUNT           reduce using rule 12 (cmd -> DELETE type .)
+    SELECT          reduce using rule 12 (cmd -> DELETE type .)
+    REFERENCE       reduce using rule 12 (cmd -> DELETE type .)
+    RENAME          reduce using rule 12 (cmd -> DELETE type .)
+    $end            reduce using rule 12 (cmd -> DELETE type .)
+
+
+state 59
+
+    (13) cmd -> FILTER comparators .
+
+    CHECK           reduce using rule 13 (cmd -> FILTER comparators .)
+    CHECKFROM       reduce using rule 13 (cmd -> FILTER comparators .)
+    ADD             reduce using rule 13 (cmd -> FILTER comparators .)
+    DELETE          reduce using rule 13 (cmd -> FILTER comparators .)
+    FILTER          reduce using rule 13 (cmd -> FILTER comparators .)
+    CSV             reduce using rule 13 (cmd -> FILTER comparators .)
+    DISPLAY         reduce using rule 13 (cmd -> FILTER comparators .)
+    PRINT           reduce using rule 13 (cmd -> FILTER comparators .)
+    COUNT           reduce using rule 13 (cmd -> FILTER comparators .)
+    SELECT          reduce using rule 13 (cmd -> FILTER comparators .)
+    REFERENCE       reduce using rule 13 (cmd -> FILTER comparators .)
+    RENAME          reduce using rule 13 (cmd -> FILTER comparators .)
+    $end            reduce using rule 13 (cmd -> FILTER comparators .)
+
+
+state 60
+
+    (24) comparator -> variable . compnext
+    (26) compnext -> . symbol variable
+    (27) compnext -> . symbol element
+    (31) symbol -> . EQUAL EQUAL
+    (32) symbol -> . INF EQUAL
+    (33) symbol -> . SUP EQUAL
+    (34) symbol -> . INF
+    (35) symbol -> . SUP
+    (36) symbol -> . STRINGEQUAL
+    (37) symbol -> . STRINGNOTEQUAL
+    (38) symbol -> . STRINGCONTAINS
+
+    EQUAL           shift and go to state 40
+    INF             shift and go to state 41
+    SUP             shift and go to state 42
+    STRINGEQUAL     shift and go to state 43
+    STRINGNOTEQUAL  shift and go to state 44
+    STRINGCONTAINS  shift and go to state 45
+
+    compnext                       shift and go to state 46
+    symbol                         shift and go to state 39
+
+state 61
+
+    (25) comparator -> element . compnext
+    (26) compnext -> . symbol variable
+    (27) compnext -> . symbol element
+    (31) symbol -> . EQUAL EQUAL
+    (32) symbol -> . INF EQUAL
+    (33) symbol -> . SUP EQUAL
+    (34) symbol -> . INF
+    (35) symbol -> . SUP
+    (36) symbol -> . STRINGEQUAL
+    (37) symbol -> . STRINGNOTEQUAL
+    (38) symbol -> . STRINGCONTAINS
+
+    EQUAL           shift and go to state 40
+    INF             shift and go to state 41
+    SUP             shift and go to state 42
+    STRINGEQUAL     shift and go to state 43
+    STRINGNOTEQUAL  shift and go to state 44
+    STRINGCONTAINS  shift and go to state 45
+
+    compnext                       shift and go to state 37
+    symbol                         shift and go to state 39
+
+state 62
+
+    (43) variable -> VAR .
+
+    EQUAL           reduce using rule 43 (variable -> VAR .)
+    INF             reduce using rule 43 (variable -> VAR .)
+    SUP             reduce using rule 43 (variable -> VAR .)
+    STRINGEQUAL     reduce using rule 43 (variable -> VAR .)
+    STRINGNOTEQUAL  reduce using rule 43 (variable -> VAR .)
+    STRINGCONTAINS  reduce using rule 43 (variable -> VAR .)
+    AND             reduce using rule 43 (variable -> VAR .)
+    $end            reduce using rule 43 (variable -> VAR .)
+    CHECK           reduce using rule 43 (variable -> VAR .)
+    CHECKFROM       reduce using rule 43 (variable -> VAR .)
+    ADD             reduce using rule 43 (variable -> VAR .)
+    DELETE          reduce using rule 43 (variable -> VAR .)
+    FILTER          reduce using rule 43 (variable -> VAR .)
+    CSV             reduce using rule 43 (variable -> VAR .)
+    DISPLAY         reduce using rule 43 (variable -> VAR .)
+    PRINT           reduce using rule 43 (variable -> VAR .)
+    COUNT           reduce using rule 43 (variable -> VAR .)
+    SELECT          reduce using rule 43 (variable -> VAR .)
+    REFERENCE       reduce using rule 43 (variable -> VAR .)
+    RENAME          reduce using rule 43 (variable -> VAR .)
+
+
+state 63
+
+    (15) cmd -> DISPLAY content .
+
+    CHECK           reduce using rule 15 (cmd -> DISPLAY content .)
+    CHECKFROM       reduce using rule 15 (cmd -> DISPLAY content .)
+    ADD             reduce using rule 15 (cmd -> DISPLAY content .)
+    DELETE          reduce using rule 15 (cmd -> DISPLAY content .)
+    FILTER          reduce using rule 15 (cmd -> DISPLAY content .)
+    CSV             reduce using rule 15 (cmd -> DISPLAY content .)
+    DISPLAY         reduce using rule 15 (cmd -> DISPLAY content .)
+    PRINT           reduce using rule 15 (cmd -> DISPLAY content .)
+    COUNT           reduce using rule 15 (cmd -> DISPLAY content .)
+    SELECT          reduce using rule 15 (cmd -> DISPLAY content .)
+    REFERENCE       reduce using rule 15 (cmd -> DISPLAY content .)
+    RENAME          reduce using rule 15 (cmd -> DISPLAY content .)
+    $end            reduce using rule 15 (cmd -> DISPLAY content .)
+
+
+state 64
+
+    (21) content -> type .
+
+    CHECK           reduce using rule 21 (content -> type .)
+    CHECKFROM       reduce using rule 21 (content -> type .)
+    ADD             reduce using rule 21 (content -> type .)
+    DELETE          reduce using rule 21 (content -> type .)
+    FILTER          reduce using rule 21 (content -> type .)
+    CSV             reduce using rule 21 (content -> type .)
+    DISPLAY         reduce using rule 21 (content -> type .)
+    PRINT           reduce using rule 21 (content -> type .)
+    COUNT           reduce using rule 21 (content -> type .)
+    SELECT          reduce using rule 21 (content -> type .)
+    REFERENCE       reduce using rule 21 (content -> type .)
+    RENAME          reduce using rule 21 (content -> type .)
+    $end            reduce using rule 21 (content -> type .)
+
+
+state 65
+
+    (16) cmd -> PRINT STRING .
+
+    CHECK           reduce using rule 16 (cmd -> PRINT STRING .)
+    CHECKFROM       reduce using rule 16 (cmd -> PRINT STRING .)
+    ADD             reduce using rule 16 (cmd -> PRINT STRING .)
+    DELETE          reduce using rule 16 (cmd -> PRINT STRING .)
+    FILTER          reduce using rule 16 (cmd -> PRINT STRING .)
+    CSV             reduce using rule 16 (cmd -> PRINT STRING .)
+    DISPLAY         reduce using rule 16 (cmd -> PRINT STRING .)
+    PRINT           reduce using rule 16 (cmd -> PRINT STRING .)
+    COUNT           reduce using rule 16 (cmd -> PRINT STRING .)
+    SELECT          reduce using rule 16 (cmd -> PRINT STRING .)
+    REFERENCE       reduce using rule 16 (cmd -> PRINT STRING .)
+    RENAME          reduce using rule 16 (cmd -> PRINT STRING .)
+    $end            reduce using rule 16 (cmd -> PRINT STRING .)
+
+
+state 66
+
+    (17) cmd -> COUNT compnextelement .
+
+    CHECK           reduce using rule 17 (cmd -> COUNT compnextelement .)
+    CHECKFROM       reduce using rule 17 (cmd -> COUNT compnextelement .)
+    ADD             reduce using rule 17 (cmd -> COUNT compnextelement .)
+    DELETE          reduce using rule 17 (cmd -> COUNT compnextelement .)
+    FILTER          reduce using rule 17 (cmd -> COUNT compnextelement .)
+    CSV             reduce using rule 17 (cmd -> COUNT compnextelement .)
+    DISPLAY         reduce using rule 17 (cmd -> COUNT compnextelement .)
+    PRINT           reduce using rule 17 (cmd -> COUNT compnextelement .)
+    COUNT           reduce using rule 17 (cmd -> COUNT compnextelement .)
+    SELECT          reduce using rule 17 (cmd -> COUNT compnextelement .)
+    REFERENCE       reduce using rule 17 (cmd -> COUNT compnextelement .)
+    RENAME          reduce using rule 17 (cmd -> COUNT compnextelement .)
+    $end            reduce using rule 17 (cmd -> COUNT compnextelement .)
+
+
+state 67
+
+    (28) compnextelement -> symbol . element
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 95
+
+state 68
+
+    (18) cmd -> SELECT variables .
+
+    CHECK           reduce using rule 18 (cmd -> SELECT variables .)
+    CHECKFROM       reduce using rule 18 (cmd -> SELECT variables .)
+    ADD             reduce using rule 18 (cmd -> SELECT variables .)
+    DELETE          reduce using rule 18 (cmd -> SELECT variables .)
+    FILTER          reduce using rule 18 (cmd -> SELECT variables .)
+    CSV             reduce using rule 18 (cmd -> SELECT variables .)
+    DISPLAY         reduce using rule 18 (cmd -> SELECT variables .)
+    PRINT           reduce using rule 18 (cmd -> SELECT variables .)
+    COUNT           reduce using rule 18 (cmd -> SELECT variables .)
+    SELECT          reduce using rule 18 (cmd -> SELECT variables .)
+    REFERENCE       reduce using rule 18 (cmd -> SELECT variables .)
+    RENAME          reduce using rule 18 (cmd -> SELECT variables .)
+    $end            reduce using rule 18 (cmd -> SELECT variables .)
+
+
+state 69
+
+    (67) variables -> VAR .
+    (68) variables -> VAR . morevariables
+    (69) morevariables -> . VAR morevariables
+    (70) morevariables -> . VAR
+
+    CHECK           reduce using rule 67 (variables -> VAR .)
+    CHECKFROM       reduce using rule 67 (variables -> VAR .)
+    ADD             reduce using rule 67 (variables -> VAR .)
+    DELETE          reduce using rule 67 (variables -> VAR .)
+    FILTER          reduce using rule 67 (variables -> VAR .)
+    CSV             reduce using rule 67 (variables -> VAR .)
+    DISPLAY         reduce using rule 67 (variables -> VAR .)
+    PRINT           reduce using rule 67 (variables -> VAR .)
+    COUNT           reduce using rule 67 (variables -> VAR .)
+    SELECT          reduce using rule 67 (variables -> VAR .)
+    REFERENCE       reduce using rule 67 (variables -> VAR .)
+    RENAME          reduce using rule 67 (variables -> VAR .)
+    $end            reduce using rule 67 (variables -> VAR .)
+    VAR             shift and go to state 96
+
+    morevariables                  shift and go to state 97
+
+state 70
+
+    (19) cmd -> REFERENCE element .
+
+    CHECK           reduce using rule 19 (cmd -> REFERENCE element .)
+    CHECKFROM       reduce using rule 19 (cmd -> REFERENCE element .)
+    ADD             reduce using rule 19 (cmd -> REFERENCE element .)
+    DELETE          reduce using rule 19 (cmd -> REFERENCE element .)
+    FILTER          reduce using rule 19 (cmd -> REFERENCE element .)
+    CSV             reduce using rule 19 (cmd -> REFERENCE element .)
+    DISPLAY         reduce using rule 19 (cmd -> REFERENCE element .)
+    PRINT           reduce using rule 19 (cmd -> REFERENCE element .)
+    COUNT           reduce using rule 19 (cmd -> REFERENCE element .)
+    SELECT          reduce using rule 19 (cmd -> REFERENCE element .)
+    REFERENCE       reduce using rule 19 (cmd -> REFERENCE element .)
+    RENAME          reduce using rule 19 (cmd -> REFERENCE element .)
+    $end            reduce using rule 19 (cmd -> REFERENCE element .)
+
+
+state 71
+
+    (20) cmd -> RENAME args .
+
+    CHECK           reduce using rule 20 (cmd -> RENAME args .)
+    CHECKFROM       reduce using rule 20 (cmd -> RENAME args .)
+    ADD             reduce using rule 20 (cmd -> RENAME args .)
+    DELETE          reduce using rule 20 (cmd -> RENAME args .)
+    FILTER          reduce using rule 20 (cmd -> RENAME args .)
+    CSV             reduce using rule 20 (cmd -> RENAME args .)
+    DISPLAY         reduce using rule 20 (cmd -> RENAME args .)
+    PRINT           reduce using rule 20 (cmd -> RENAME args .)
+    COUNT           reduce using rule 20 (cmd -> RENAME args .)
+    SELECT          reduce using rule 20 (cmd -> RENAME args .)
+    REFERENCE       reduce using rule 20 (cmd -> RENAME args .)
+    RENAME          reduce using rule 20 (cmd -> RENAME args .)
+    $end            reduce using rule 20 (cmd -> RENAME args .)
+
+
+state 72
+
+    (71) args -> element .
+    (72) args -> element . moreargs
+    (73) moreargs -> . element moreargs
+    (74) moreargs -> . element
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    CHECK           reduce using rule 71 (args -> element .)
+    CHECKFROM       reduce using rule 71 (args -> element .)
+    ADD             reduce using rule 71 (args -> element .)
+    DELETE          reduce using rule 71 (args -> element .)
+    FILTER          reduce using rule 71 (args -> element .)
+    CSV             reduce using rule 71 (args -> element .)
+    DISPLAY         reduce using rule 71 (args -> element .)
+    PRINT           reduce using rule 71 (args -> element .)
+    COUNT           reduce using rule 71 (args -> element .)
+    SELECT          reduce using rule 71 (args -> element .)
+    REFERENCE       reduce using rule 71 (args -> element .)
+    RENAME          reduce using rule 71 (args -> element .)
+    $end            reduce using rule 71 (args -> element .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 98
+    moreargs                       shift and go to state 99
+
+state 73
+
+    (48) set -> set_fact conjset .
+
+    $end            reduce using rule 48 (set -> set_fact conjset .)
+    CHECK           reduce using rule 48 (set -> set_fact conjset .)
+    CHECKFROM       reduce using rule 48 (set -> set_fact conjset .)
+    ADD             reduce using rule 48 (set -> set_fact conjset .)
+    DELETE          reduce using rule 48 (set -> set_fact conjset .)
+    FILTER          reduce using rule 48 (set -> set_fact conjset .)
+    CSV             reduce using rule 48 (set -> set_fact conjset .)
+    DISPLAY         reduce using rule 48 (set -> set_fact conjset .)
+    PRINT           reduce using rule 48 (set -> set_fact conjset .)
+    COUNT           reduce using rule 48 (set -> set_fact conjset .)
+    SELECT          reduce using rule 48 (set -> set_fact conjset .)
+    REFERENCE       reduce using rule 48 (set -> set_fact conjset .)
+    RENAME          reduce using rule 48 (set -> set_fact conjset .)
+
+
+state 74
+
+    (63) conjset -> AND . set_fact conjset
+    (49) set_fact -> . set_fact_classic
+    (50) set_fact -> . set_fact_with_not
+    (51) set_fact -> . fact
+    (52) set_fact_classic -> . set_element set_element set_element
+    (53) set_fact_classic -> . element element VAR
+    (54) set_fact_with_not -> . NOT set_element set_element set_element
+    (55) set_fact_with_not -> . set_element NOT set_element set_element
+    (56) set_fact_with_not -> . set_element set_element NOT set_element
+    (57) set_fact_with_not -> . set_element set_element set_element NOT
+    (58) set_fact_with_not -> . element element set_element NOT
+    (59) set_fact_with_not -> . element element NOT set_element
+    (47) fact -> . element element element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NOT             shift and go to state 33
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_fact                       shift and go to state 100
+    set_fact_classic               shift and go to state 30
+    set_fact_with_not              shift and go to state 31
+    fact                           shift and go to state 101
+    set_element                    shift and go to state 32
+    element                        shift and go to state 102
+
+state 75
+
+    (52) set_fact_classic -> set_element set_element . set_element
+    (56) set_fact_with_not -> set_element set_element . NOT set_element
+    (57) set_fact_with_not -> set_element set_element . set_element NOT
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    NOT             shift and go to state 104
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 103
+    element                        shift and go to state 77
+
+state 76
+
+    (55) set_fact_with_not -> set_element NOT . set_element set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 105
+    element                        shift and go to state 77
+
+state 77
+
+    (60) set_element -> element .
+
+    NOT             reduce using rule 60 (set_element -> element .)
+    VAR             reduce using rule 60 (set_element -> element .)
+    NUMBER          reduce using rule 60 (set_element -> element .)
+    NAME            reduce using rule 60 (set_element -> element .)
+    STRING          reduce using rule 60 (set_element -> element .)
+    AND             reduce using rule 60 (set_element -> element .)
+    $end            reduce using rule 60 (set_element -> element .)
+    CHECK           reduce using rule 60 (set_element -> element .)
+    CHECKFROM       reduce using rule 60 (set_element -> element .)
+    ADD             reduce using rule 60 (set_element -> element .)
+    DELETE          reduce using rule 60 (set_element -> element .)
+    FILTER          reduce using rule 60 (set_element -> element .)
+    CSV             reduce using rule 60 (set_element -> element .)
+    DISPLAY         reduce using rule 60 (set_element -> element .)
+    PRINT           reduce using rule 60 (set_element -> element .)
+    COUNT           reduce using rule 60 (set_element -> element .)
+    SELECT          reduce using rule 60 (set_element -> element .)
+    REFERENCE       reduce using rule 60 (set_element -> element .)
+    RENAME          reduce using rule 60 (set_element -> element .)
+
+
+state 78
+
+    (61) set_element -> VAR .
+
+    NOT             reduce using rule 61 (set_element -> VAR .)
+    VAR             reduce using rule 61 (set_element -> VAR .)
+    NUMBER          reduce using rule 61 (set_element -> VAR .)
+    NAME            reduce using rule 61 (set_element -> VAR .)
+    STRING          reduce using rule 61 (set_element -> VAR .)
+    AND             reduce using rule 61 (set_element -> VAR .)
+    $end            reduce using rule 61 (set_element -> VAR .)
+    CHECK           reduce using rule 61 (set_element -> VAR .)
+    CHECKFROM       reduce using rule 61 (set_element -> VAR .)
+    ADD             reduce using rule 61 (set_element -> VAR .)
+    DELETE          reduce using rule 61 (set_element -> VAR .)
+    FILTER          reduce using rule 61 (set_element -> VAR .)
+    CSV             reduce using rule 61 (set_element -> VAR .)
+    DISPLAY         reduce using rule 61 (set_element -> VAR .)
+    PRINT           reduce using rule 61 (set_element -> VAR .)
+    COUNT           reduce using rule 61 (set_element -> VAR .)
+    SELECT          reduce using rule 61 (set_element -> VAR .)
+    REFERENCE       reduce using rule 61 (set_element -> VAR .)
+    RENAME          reduce using rule 61 (set_element -> VAR .)
+
+
+state 79
+
+    (54) set_fact_with_not -> NOT set_element . set_element set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 106
+    element                        shift and go to state 77
+
+state 80
+
+    (8) mcmd -> cmd mcmd .
+
+    $end            reduce using rule 8 (mcmd -> cmd mcmd .)
+
+
+state 81
+
+    (47) fact -> element element element .
+    (60) set_element -> element .
+
+    $end            reduce using rule 47 (fact -> element element element .)
+    AND             reduce using rule 47 (fact -> element element element .)
+    CHECK           reduce using rule 47 (fact -> element element element .)
+    CHECKFROM       reduce using rule 47 (fact -> element element element .)
+    ADD             reduce using rule 47 (fact -> element element element .)
+    DELETE          reduce using rule 47 (fact -> element element element .)
+    FILTER          reduce using rule 47 (fact -> element element element .)
+    CSV             reduce using rule 47 (fact -> element element element .)
+    DISPLAY         reduce using rule 47 (fact -> element element element .)
+    PRINT           reduce using rule 47 (fact -> element element element .)
+    COUNT           reduce using rule 47 (fact -> element element element .)
+    SELECT          reduce using rule 47 (fact -> element element element .)
+    REFERENCE       reduce using rule 47 (fact -> element element element .)
+    RENAME          reduce using rule 47 (fact -> element element element .)
+    NOT             reduce using rule 60 (set_element -> element .)
+
+
+state 82
+
+    (53) set_fact_classic -> element element VAR .
+    (61) set_element -> VAR .
+
+    AND             reduce using rule 53 (set_fact_classic -> element element VAR .)
+    $end            reduce using rule 53 (set_fact_classic -> element element VAR .)
+    CHECK           reduce using rule 53 (set_fact_classic -> element element VAR .)
+    CHECKFROM       reduce using rule 53 (set_fact_classic -> element element VAR .)
+    ADD             reduce using rule 53 (set_fact_classic -> element element VAR .)
+    DELETE          reduce using rule 53 (set_fact_classic -> element element VAR .)
+    FILTER          reduce using rule 53 (set_fact_classic -> element element VAR .)
+    CSV             reduce using rule 53 (set_fact_classic -> element element VAR .)
+    DISPLAY         reduce using rule 53 (set_fact_classic -> element element VAR .)
+    PRINT           reduce using rule 53 (set_fact_classic -> element element VAR .)
+    COUNT           reduce using rule 53 (set_fact_classic -> element element VAR .)
+    SELECT          reduce using rule 53 (set_fact_classic -> element element VAR .)
+    REFERENCE       reduce using rule 53 (set_fact_classic -> element element VAR .)
+    RENAME          reduce using rule 53 (set_fact_classic -> element element VAR .)
+    NOT             reduce using rule 61 (set_element -> VAR .)
+
+
+state 83
+
+    (58) set_fact_with_not -> element element set_element . NOT
+
+    NOT             shift and go to state 107
+
+
+state 84
+
+    (59) set_fact_with_not -> element element NOT . set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 77
+    set_element                    shift and go to state 108
+
+state 85
+
+    (26) compnext -> symbol variable .
+
+    AND             reduce using rule 26 (compnext -> symbol variable .)
+    $end            reduce using rule 26 (compnext -> symbol variable .)
+    CHECK           reduce using rule 26 (compnext -> symbol variable .)
+    CHECKFROM       reduce using rule 26 (compnext -> symbol variable .)
+    ADD             reduce using rule 26 (compnext -> symbol variable .)
+    DELETE          reduce using rule 26 (compnext -> symbol variable .)
+    FILTER          reduce using rule 26 (compnext -> symbol variable .)
+    CSV             reduce using rule 26 (compnext -> symbol variable .)
+    DISPLAY         reduce using rule 26 (compnext -> symbol variable .)
+    PRINT           reduce using rule 26 (compnext -> symbol variable .)
+    COUNT           reduce using rule 26 (compnext -> symbol variable .)
+    SELECT          reduce using rule 26 (compnext -> symbol variable .)
+    REFERENCE       reduce using rule 26 (compnext -> symbol variable .)
+    RENAME          reduce using rule 26 (compnext -> symbol variable .)
+
+
+state 86
+
+    (27) compnext -> symbol element .
+
+    AND             reduce using rule 27 (compnext -> symbol element .)
+    $end            reduce using rule 27 (compnext -> symbol element .)
+    CHECK           reduce using rule 27 (compnext -> symbol element .)
+    CHECKFROM       reduce using rule 27 (compnext -> symbol element .)
+    ADD             reduce using rule 27 (compnext -> symbol element .)
+    DELETE          reduce using rule 27 (compnext -> symbol element .)
+    FILTER          reduce using rule 27 (compnext -> symbol element .)
+    CSV             reduce using rule 27 (compnext -> symbol element .)
+    DISPLAY         reduce using rule 27 (compnext -> symbol element .)
+    PRINT           reduce using rule 27 (compnext -> symbol element .)
+    COUNT           reduce using rule 27 (compnext -> symbol element .)
+    SELECT          reduce using rule 27 (compnext -> symbol element .)
+    REFERENCE       reduce using rule 27 (compnext -> symbol element .)
+    RENAME          reduce using rule 27 (compnext -> symbol element .)
+
+
+state 87
+
+    (31) symbol -> EQUAL EQUAL .
+
+    VAR             reduce using rule 31 (symbol -> EQUAL EQUAL .)
+    NUMBER          reduce using rule 31 (symbol -> EQUAL EQUAL .)
+    NAME            reduce using rule 31 (symbol -> EQUAL EQUAL .)
+    STRING          reduce using rule 31 (symbol -> EQUAL EQUAL .)
+
+
+state 88
+
+    (32) symbol -> INF EQUAL .
+
+    VAR             reduce using rule 32 (symbol -> INF EQUAL .)
+    NUMBER          reduce using rule 32 (symbol -> INF EQUAL .)
+    NAME            reduce using rule 32 (symbol -> INF EQUAL .)
+    STRING          reduce using rule 32 (symbol -> INF EQUAL .)
+
+
+state 89
+
+    (33) symbol -> SUP EQUAL .
+
+    VAR             reduce using rule 33 (symbol -> SUP EQUAL .)
+    NUMBER          reduce using rule 33 (symbol -> SUP EQUAL .)
+    NAME            reduce using rule 33 (symbol -> SUP EQUAL .)
+    STRING          reduce using rule 33 (symbol -> SUP EQUAL .)
+
+
+state 90
+
+    (29) conjcomparator -> AND comparator . conjcomparator
+    (29) conjcomparator -> . AND comparator conjcomparator
+    (30) conjcomparator -> .
+
+    AND             shift and go to state 48
+    $end            reduce using rule 30 (conjcomparator -> .)
+    CHECK           reduce using rule 30 (conjcomparator -> .)
+    CHECKFROM       reduce using rule 30 (conjcomparator -> .)
+    ADD             reduce using rule 30 (conjcomparator -> .)
+    DELETE          reduce using rule 30 (conjcomparator -> .)
+    FILTER          reduce using rule 30 (conjcomparator -> .)
+    CSV             reduce using rule 30 (conjcomparator -> .)
+    DISPLAY         reduce using rule 30 (conjcomparator -> .)
+    PRINT           reduce using rule 30 (conjcomparator -> .)
+    COUNT           reduce using rule 30 (conjcomparator -> .)
+    SELECT          reduce using rule 30 (conjcomparator -> .)
+    REFERENCE       reduce using rule 30 (conjcomparator -> .)
+    RENAME          reduce using rule 30 (conjcomparator -> .)
+
+    conjcomparator                 shift and go to state 109
+
+state 91
+
+    (64) csvfile -> NAME DOT CSV .
+
+    $end            reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    CHECK           reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    CHECKFROM       reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    ADD             reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    DELETE          reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    FILTER          reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    CSV             reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    DISPLAY         reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    PRINT           reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    COUNT           reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    SELECT          reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    REFERENCE       reduce using rule 64 (csvfile -> NAME DOT CSV .)
+    RENAME          reduce using rule 64 (csvfile -> NAME DOT CSV .)
+
+
+state 92
+
+    (65) pred -> NAME DOT PREDEXT .
+
+    $end            reduce using rule 65 (pred -> NAME DOT PREDEXT .)
+
+
+state 93
+
+    (64) csvfile -> NAME DOT . CSV
+
+    CSV             shift and go to state 91
+
+
+state 94
+
+    (66) name_type -> NAME type .
+
+    CHECK           reduce using rule 66 (name_type -> NAME type .)
+    CHECKFROM       reduce using rule 66 (name_type -> NAME type .)
+    ADD             reduce using rule 66 (name_type -> NAME type .)
+    DELETE          reduce using rule 66 (name_type -> NAME type .)
+    FILTER          reduce using rule 66 (name_type -> NAME type .)
+    CSV             reduce using rule 66 (name_type -> NAME type .)
+    DISPLAY         reduce using rule 66 (name_type -> NAME type .)
+    PRINT           reduce using rule 66 (name_type -> NAME type .)
+    COUNT           reduce using rule 66 (name_type -> NAME type .)
+    SELECT          reduce using rule 66 (name_type -> NAME type .)
+    REFERENCE       reduce using rule 66 (name_type -> NAME type .)
+    RENAME          reduce using rule 66 (name_type -> NAME type .)
+    $end            reduce using rule 66 (name_type -> NAME type .)
+
+
+state 95
+
+    (28) compnextelement -> symbol element .
+
+    CHECK           reduce using rule 28 (compnextelement -> symbol element .)
+    CHECKFROM       reduce using rule 28 (compnextelement -> symbol element .)
+    ADD             reduce using rule 28 (compnextelement -> symbol element .)
+    DELETE          reduce using rule 28 (compnextelement -> symbol element .)
+    FILTER          reduce using rule 28 (compnextelement -> symbol element .)
+    CSV             reduce using rule 28 (compnextelement -> symbol element .)
+    DISPLAY         reduce using rule 28 (compnextelement -> symbol element .)
+    PRINT           reduce using rule 28 (compnextelement -> symbol element .)
+    COUNT           reduce using rule 28 (compnextelement -> symbol element .)
+    SELECT          reduce using rule 28 (compnextelement -> symbol element .)
+    REFERENCE       reduce using rule 28 (compnextelement -> symbol element .)
+    RENAME          reduce using rule 28 (compnextelement -> symbol element .)
+    $end            reduce using rule 28 (compnextelement -> symbol element .)
+
+
+state 96
+
+    (69) morevariables -> VAR . morevariables
+    (70) morevariables -> VAR .
+    (69) morevariables -> . VAR morevariables
+    (70) morevariables -> . VAR
+
+    CHECK           reduce using rule 70 (morevariables -> VAR .)
+    CHECKFROM       reduce using rule 70 (morevariables -> VAR .)
+    ADD             reduce using rule 70 (morevariables -> VAR .)
+    DELETE          reduce using rule 70 (morevariables -> VAR .)
+    FILTER          reduce using rule 70 (morevariables -> VAR .)
+    CSV             reduce using rule 70 (morevariables -> VAR .)
+    DISPLAY         reduce using rule 70 (morevariables -> VAR .)
+    PRINT           reduce using rule 70 (morevariables -> VAR .)
+    COUNT           reduce using rule 70 (morevariables -> VAR .)
+    SELECT          reduce using rule 70 (morevariables -> VAR .)
+    REFERENCE       reduce using rule 70 (morevariables -> VAR .)
+    RENAME          reduce using rule 70 (morevariables -> VAR .)
+    $end            reduce using rule 70 (morevariables -> VAR .)
+    VAR             shift and go to state 96
+
+    morevariables                  shift and go to state 110
+
+state 97
+
+    (68) variables -> VAR morevariables .
+
+    CHECK           reduce using rule 68 (variables -> VAR morevariables .)
+    CHECKFROM       reduce using rule 68 (variables -> VAR morevariables .)
+    ADD             reduce using rule 68 (variables -> VAR morevariables .)
+    DELETE          reduce using rule 68 (variables -> VAR morevariables .)
+    FILTER          reduce using rule 68 (variables -> VAR morevariables .)
+    CSV             reduce using rule 68 (variables -> VAR morevariables .)
+    DISPLAY         reduce using rule 68 (variables -> VAR morevariables .)
+    PRINT           reduce using rule 68 (variables -> VAR morevariables .)
+    COUNT           reduce using rule 68 (variables -> VAR morevariables .)
+    SELECT          reduce using rule 68 (variables -> VAR morevariables .)
+    REFERENCE       reduce using rule 68 (variables -> VAR morevariables .)
+    RENAME          reduce using rule 68 (variables -> VAR morevariables .)
+    $end            reduce using rule 68 (variables -> VAR morevariables .)
+
+
+state 98
+
+    (73) moreargs -> element . moreargs
+    (74) moreargs -> element .
+    (73) moreargs -> . element moreargs
+    (74) moreargs -> . element
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    CHECK           reduce using rule 74 (moreargs -> element .)
+    CHECKFROM       reduce using rule 74 (moreargs -> element .)
+    ADD             reduce using rule 74 (moreargs -> element .)
+    DELETE          reduce using rule 74 (moreargs -> element .)
+    FILTER          reduce using rule 74 (moreargs -> element .)
+    CSV             reduce using rule 74 (moreargs -> element .)
+    DISPLAY         reduce using rule 74 (moreargs -> element .)
+    PRINT           reduce using rule 74 (moreargs -> element .)
+    COUNT           reduce using rule 74 (moreargs -> element .)
+    SELECT          reduce using rule 74 (moreargs -> element .)
+    REFERENCE       reduce using rule 74 (moreargs -> element .)
+    RENAME          reduce using rule 74 (moreargs -> element .)
+    $end            reduce using rule 74 (moreargs -> element .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 98
+    moreargs                       shift and go to state 111
+
+state 99
+
+    (72) args -> element moreargs .
+
+    CHECK           reduce using rule 72 (args -> element moreargs .)
+    CHECKFROM       reduce using rule 72 (args -> element moreargs .)
+    ADD             reduce using rule 72 (args -> element moreargs .)
+    DELETE          reduce using rule 72 (args -> element moreargs .)
+    FILTER          reduce using rule 72 (args -> element moreargs .)
+    CSV             reduce using rule 72 (args -> element moreargs .)
+    DISPLAY         reduce using rule 72 (args -> element moreargs .)
+    PRINT           reduce using rule 72 (args -> element moreargs .)
+    COUNT           reduce using rule 72 (args -> element moreargs .)
+    SELECT          reduce using rule 72 (args -> element moreargs .)
+    REFERENCE       reduce using rule 72 (args -> element moreargs .)
+    RENAME          reduce using rule 72 (args -> element moreargs .)
+    $end            reduce using rule 72 (args -> element moreargs .)
+
+
+state 100
+
+    (63) conjset -> AND set_fact . conjset
+    (62) conjset -> .
+    (63) conjset -> . AND set_fact conjset
+
+    $end            reduce using rule 62 (conjset -> .)
+    CHECK           reduce using rule 62 (conjset -> .)
+    CHECKFROM       reduce using rule 62 (conjset -> .)
+    ADD             reduce using rule 62 (conjset -> .)
+    DELETE          reduce using rule 62 (conjset -> .)
+    FILTER          reduce using rule 62 (conjset -> .)
+    CSV             reduce using rule 62 (conjset -> .)
+    DISPLAY         reduce using rule 62 (conjset -> .)
+    PRINT           reduce using rule 62 (conjset -> .)
+    COUNT           reduce using rule 62 (conjset -> .)
+    SELECT          reduce using rule 62 (conjset -> .)
+    REFERENCE       reduce using rule 62 (conjset -> .)
+    RENAME          reduce using rule 62 (conjset -> .)
+    AND             shift and go to state 74
+
+    conjset                        shift and go to state 112
+
+state 101
+
+    (51) set_fact -> fact .
+
+    AND             reduce using rule 51 (set_fact -> fact .)
+    $end            reduce using rule 51 (set_fact -> fact .)
+    CHECK           reduce using rule 51 (set_fact -> fact .)
+    CHECKFROM       reduce using rule 51 (set_fact -> fact .)
+    ADD             reduce using rule 51 (set_fact -> fact .)
+    DELETE          reduce using rule 51 (set_fact -> fact .)
+    FILTER          reduce using rule 51 (set_fact -> fact .)
+    CSV             reduce using rule 51 (set_fact -> fact .)
+    DISPLAY         reduce using rule 51 (set_fact -> fact .)
+    PRINT           reduce using rule 51 (set_fact -> fact .)
+    COUNT           reduce using rule 51 (set_fact -> fact .)
+    SELECT          reduce using rule 51 (set_fact -> fact .)
+    REFERENCE       reduce using rule 51 (set_fact -> fact .)
+    RENAME          reduce using rule 51 (set_fact -> fact .)
+
+
+state 102
+
+    (53) set_fact_classic -> element . element VAR
+    (58) set_fact_with_not -> element . element set_element NOT
+    (59) set_fact_with_not -> element . element NOT set_element
+    (47) fact -> element . element element
+    (60) set_element -> element .
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+    NOT             reduce using rule 60 (set_element -> element .)
+    VAR             reduce using rule 60 (set_element -> element .)
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+  ! NUMBER          [ reduce using rule 60 (set_element -> element .) ]
+  ! NAME            [ reduce using rule 60 (set_element -> element .) ]
+  ! STRING          [ reduce using rule 60 (set_element -> element .) ]
+
+    element                        shift and go to state 113
+
+state 103
+
+    (52) set_fact_classic -> set_element set_element set_element .
+    (57) set_fact_with_not -> set_element set_element set_element . NOT
+
+    AND             reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    $end            reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    CHECK           reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    CHECKFROM       reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    ADD             reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    DELETE          reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    FILTER          reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    CSV             reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    DISPLAY         reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    PRINT           reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    COUNT           reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    SELECT          reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    REFERENCE       reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    RENAME          reduce using rule 52 (set_fact_classic -> set_element set_element set_element .)
+    NOT             shift and go to state 114
+
+
+state 104
+
+    (56) set_fact_with_not -> set_element set_element NOT . set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 115
+    element                        shift and go to state 77
+
+state 105
+
+    (55) set_fact_with_not -> set_element NOT set_element . set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 116
+    element                        shift and go to state 77
+
+state 106
+
+    (54) set_fact_with_not -> NOT set_element set_element . set_element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 78
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    set_element                    shift and go to state 117
+    element                        shift and go to state 77
+
+state 107
+
+    (58) set_fact_with_not -> element element set_element NOT .
+
+    AND             reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    $end            reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    CHECK           reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    CHECKFROM       reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    ADD             reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    DELETE          reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    FILTER          reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    CSV             reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    DISPLAY         reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    PRINT           reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    COUNT           reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    SELECT          reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    REFERENCE       reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+    RENAME          reduce using rule 58 (set_fact_with_not -> element element set_element NOT .)
+
+
+state 108
+
+    (59) set_fact_with_not -> element element NOT set_element .
+
+    AND             reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    $end            reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    CHECK           reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    CHECKFROM       reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    ADD             reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    DELETE          reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    FILTER          reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    CSV             reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    DISPLAY         reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    PRINT           reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    COUNT           reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    SELECT          reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    REFERENCE       reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+    RENAME          reduce using rule 59 (set_fact_with_not -> element element NOT set_element .)
+
+
+state 109
+
+    (29) conjcomparator -> AND comparator conjcomparator .
+
+    $end            reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    CHECK           reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    CHECKFROM       reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    ADD             reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    DELETE          reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    FILTER          reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    CSV             reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    DISPLAY         reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    PRINT           reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    COUNT           reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    SELECT          reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    REFERENCE       reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+    RENAME          reduce using rule 29 (conjcomparator -> AND comparator conjcomparator .)
+
+
+state 110
+
+    (69) morevariables -> VAR morevariables .
+
+    CHECK           reduce using rule 69 (morevariables -> VAR morevariables .)
+    CHECKFROM       reduce using rule 69 (morevariables -> VAR morevariables .)
+    ADD             reduce using rule 69 (morevariables -> VAR morevariables .)
+    DELETE          reduce using rule 69 (morevariables -> VAR morevariables .)
+    FILTER          reduce using rule 69 (morevariables -> VAR morevariables .)
+    CSV             reduce using rule 69 (morevariables -> VAR morevariables .)
+    DISPLAY         reduce using rule 69 (morevariables -> VAR morevariables .)
+    PRINT           reduce using rule 69 (morevariables -> VAR morevariables .)
+    COUNT           reduce using rule 69 (morevariables -> VAR morevariables .)
+    SELECT          reduce using rule 69 (morevariables -> VAR morevariables .)
+    REFERENCE       reduce using rule 69 (morevariables -> VAR morevariables .)
+    RENAME          reduce using rule 69 (morevariables -> VAR morevariables .)
+    $end            reduce using rule 69 (morevariables -> VAR morevariables .)
+
+
+state 111
+
+    (73) moreargs -> element moreargs .
+
+    CHECK           reduce using rule 73 (moreargs -> element moreargs .)
+    CHECKFROM       reduce using rule 73 (moreargs -> element moreargs .)
+    ADD             reduce using rule 73 (moreargs -> element moreargs .)
+    DELETE          reduce using rule 73 (moreargs -> element moreargs .)
+    FILTER          reduce using rule 73 (moreargs -> element moreargs .)
+    CSV             reduce using rule 73 (moreargs -> element moreargs .)
+    DISPLAY         reduce using rule 73 (moreargs -> element moreargs .)
+    PRINT           reduce using rule 73 (moreargs -> element moreargs .)
+    COUNT           reduce using rule 73 (moreargs -> element moreargs .)
+    SELECT          reduce using rule 73 (moreargs -> element moreargs .)
+    REFERENCE       reduce using rule 73 (moreargs -> element moreargs .)
+    RENAME          reduce using rule 73 (moreargs -> element moreargs .)
+    $end            reduce using rule 73 (moreargs -> element moreargs .)
+
+
+state 112
+
+    (63) conjset -> AND set_fact conjset .
+
+    $end            reduce using rule 63 (conjset -> AND set_fact conjset .)
+    CHECK           reduce using rule 63 (conjset -> AND set_fact conjset .)
+    CHECKFROM       reduce using rule 63 (conjset -> AND set_fact conjset .)
+    ADD             reduce using rule 63 (conjset -> AND set_fact conjset .)
+    DELETE          reduce using rule 63 (conjset -> AND set_fact conjset .)
+    FILTER          reduce using rule 63 (conjset -> AND set_fact conjset .)
+    CSV             reduce using rule 63 (conjset -> AND set_fact conjset .)
+    DISPLAY         reduce using rule 63 (conjset -> AND set_fact conjset .)
+    PRINT           reduce using rule 63 (conjset -> AND set_fact conjset .)
+    COUNT           reduce using rule 63 (conjset -> AND set_fact conjset .)
+    SELECT          reduce using rule 63 (conjset -> AND set_fact conjset .)
+    REFERENCE       reduce using rule 63 (conjset -> AND set_fact conjset .)
+    RENAME          reduce using rule 63 (conjset -> AND set_fact conjset .)
+
+
+state 113
+
+    (53) set_fact_classic -> element element . VAR
+    (58) set_fact_with_not -> element element . set_element NOT
+    (59) set_fact_with_not -> element element . NOT set_element
+    (47) fact -> element element . element
+    (60) set_element -> . element
+    (61) set_element -> . VAR
+    (44) element -> . NUMBER
+    (45) element -> . NAME
+    (46) element -> . STRING
+
+    VAR             shift and go to state 82
+    NOT             shift and go to state 84
+    NUMBER          shift and go to state 27
+    NAME            shift and go to state 38
+    STRING          shift and go to state 22
+
+    element                        shift and go to state 81
+    set_element                    shift and go to state 83
+
+state 114
+
+    (57) set_fact_with_not -> set_element set_element set_element NOT .
+
+    AND             reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    $end            reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    CHECK           reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    CHECKFROM       reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    ADD             reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    DELETE          reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    FILTER          reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    CSV             reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    DISPLAY         reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    PRINT           reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    COUNT           reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    SELECT          reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    REFERENCE       reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+    RENAME          reduce using rule 57 (set_fact_with_not -> set_element set_element set_element NOT .)
+
+
+state 115
+
+    (56) set_fact_with_not -> set_element set_element NOT set_element .
+
+    AND             reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    $end            reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    CHECK           reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    CHECKFROM       reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    ADD             reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    DELETE          reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    FILTER          reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    CSV             reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    DISPLAY         reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    PRINT           reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    COUNT           reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    SELECT          reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    REFERENCE       reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+    RENAME          reduce using rule 56 (set_fact_with_not -> set_element set_element NOT set_element .)
+
+
+state 116
+
+    (55) set_fact_with_not -> set_element NOT set_element set_element .
+
+    AND             reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    $end            reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    CHECK           reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    CHECKFROM       reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    ADD             reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    DELETE          reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    FILTER          reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    CSV             reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    DISPLAY         reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    PRINT           reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    COUNT           reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    SELECT          reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    REFERENCE       reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+    RENAME          reduce using rule 55 (set_fact_with_not -> set_element NOT set_element set_element .)
+
+
+state 117
+
+    (54) set_fact_with_not -> NOT set_element set_element set_element .
+
+    AND             reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    $end            reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    CHECK           reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    CHECKFROM       reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    ADD             reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    DELETE          reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    FILTER          reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    CSV             reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    DISPLAY         reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    PRINT           reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    COUNT           reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    SELECT          reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    REFERENCE       reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+    RENAME          reduce using rule 54 (set_fact_with_not -> NOT set_element set_element set_element .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for NUMBER in state 8 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 8 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 8 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 53 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 53 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 53 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 102 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 102 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 102 resolved as shift
+WARNING: reduce/reduce conflict in state 10 resolved using rule (type -> fact)
+WARNING: rejected rule (set_fact -> fact) in state 10

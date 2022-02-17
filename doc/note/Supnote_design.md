@@ -1,0 +1,13 @@
+# Supnote
+- supnote:
+	- Note:
+		- Context: (List):
+			- background image
+			- theme
+			- knowledge graph == logic:
+				- facts
+				- rules:
+					- inférence
+					- validation
+					- alias
+					- macros
