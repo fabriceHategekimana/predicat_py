@@ -3,8 +3,6 @@
 	- [X] [documentation](documentation)
 	- [X] [User_interface](User_interface)
 	
-
-
 TODO:
 changer le format des rules (maintenant motors) pour avoir:
 
