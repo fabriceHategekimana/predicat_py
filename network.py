@@ -5,7 +5,6 @@ import csv
 
 IMAGES = {}
 
-
 def getImages():
     try:
         with open("logo.csv") as f:
@@ -41,7 +40,9 @@ def addNodes(net, facts):
 
 
 def addEdges(net, facts):
-    # on crée un dictionnaire qui assignera à chaque type de noeud une couleur
+    """
+    Crée un dictionnaire qui assignera à chaque type de noeud une couleur
+    """
     d = {}
     uniqueLinks = unique(getColumn(1, facts))
     for u in uniqueLinks:

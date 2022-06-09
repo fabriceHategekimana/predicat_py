@@ -1,5 +1,7 @@
 import sqlite3
 from sqlite3 import Error
+import os.path
+from os import path
 
 CREATE_FACTS= """ CREATE TABLE facts_default(
                   "subject" TEXT,
@@ -48,13 +50,18 @@ class Data():
     defaultTable="default"
 
     def __init__(self):
-        #Create database if not exist
-        self.createDbIfNotExist()
-        #Connect database and create a pointer
-        self.conn= sqlite3.connect(self.nom)
-        self.c= self.conn.cursor()
-        #Create table if not exist
-        self.createTablesIfNotExist()
+        if path.exists("data.db") == False:
+            #Create database if not exist
+            self.createDbIfNotExist()
+            #Connect database and create a pointer
+            self.conn= sqlite3.connect(self.nom)
+            self.c= self.conn.cursor()
+            #Create table if not exist
+            self.createTablesIfNotExist()
+        else:
+            #Connect database and create a pointer
+            self.conn= sqlite3.connect(self.nom)
+            self.c= self.conn.cursor()
 
     def createDbIfNotExist(self):
         conn= None

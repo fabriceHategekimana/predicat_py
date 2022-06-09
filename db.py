@@ -1,5 +1,7 @@
 import sqlite3
 from sqlite3 import Error
+import os.path
+from os import path
 
 CREATE_FACTS= """ CREATE TABLE facts(
                   "subject" TEXT,
@@ -56,25 +58,27 @@ class Data():
         self.createTablesIfNotExist()
 
     def createDbIfNotExist(self):
-        conn= None
-        try:
-            conn= sqlite3.connect(self.nom)
-        except Error as e:
-            print(e)
-        finally:
-            if conn:
-                conn.close()
+        if path.exists("data.db") == False:
+            conn= None
+            try:
+                conn= sqlite3.connect(self.nom)
+            except Error as e:
+                print(e)
+            finally:
+                if conn:
+                    conn.close()
 
     def createTablesIfNotExist(self):
-        try:
-           self.c.execute(CREATE_FACTS) 
-           self.c.execute(CREATE_RULES) 
-           self.c.execute(CREATE_HISTORICAL) 
-           self.c.execute(CREATE_STAGE) 
-           self.c.execute(INITIALYZE_STAGE) 
-           self.conn.commit()
-        except Error as e:
-            print(e)
+        if path.exists("data.db") == False:
+            try:
+               self.c.execute(CREATE_FACTS) 
+               self.c.execute(CREATE_RULES) 
+               self.c.execute(CREATE_HISTORICAL) 
+               self.c.execute(CREATE_STAGE) 
+               self.c.execute(INITIALYZE_STAGE) 
+               self.conn.commit()
+            except Error as e:
+                print(e)
 
     def sqlQuery(self, sql):
         tab= []

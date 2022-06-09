@@ -103,5 +103,4 @@ class MyPrompt(Cmd):
             tab.append(n[0])
         return tab
 
-
-MyPrompt().cmdloop()
+#MyPrompt().cmdloop()

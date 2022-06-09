@@ -176,7 +176,6 @@ def add(entry, value):
 
 def delete(entry, value):
     """entry: list of tuple (negative, subject, link, goal)"""
-    print(value)
     if entry.shape[0] > 0:
         if value[0] == "set":
             facts = substitute(entry, value[1])

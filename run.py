@@ -1,6 +1,10 @@
 from commands import *
 from functools import reduce
 
+def dataPrint(dataFrame):
+    concatenation = lambda x: print(",".join(x))
+    dataFrame.apply(concatenation, axis=1)
+
 def run(inp):
     """run a command. Two cases:
         1) this is a rule command and we perform delete, display or save
@@ -18,6 +22,23 @@ def run(inp):
     else:
         val = runCommand(inp)
         print(val)
+        propagation()
+
+def runFromExternal(inp):
+    """like run but print the results differently for a cli purpose"""
+    db.clearStage()
+    db.clearHistory()
+    first, rest = getFirstWord(inp)
+    if first == "rule":
+        rest= runRule(rest)
+        subRun(rest)
+    elif first == "node":
+        dataPrint(db.getNodes())
+    elif first == "link":
+        dataPrint(db.getLinks())
+    else:
+        val = runCommand(inp)
+        dataPrint(val)
         propagation()
 
 def runRule(rest):
