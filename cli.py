@@ -3,9 +3,12 @@ from db2 import *
 from run import *
 from import_module import *
 
+MACROS = pd.DataFrame({"name": [], "body": []})
+
+
 # version 2
 class MyPrompt(Cmd):
-    #defining variables for i in  the display
+    # defining variables for i in  the display
     logo = ""+"|"
     prompt = logo+'normal> '
     intro = "<!>Starting the NEW server<!>"
@@ -31,43 +34,49 @@ class MyPrompt(Cmd):
     def do_mode(self, inp):
         if inp in ["normal","union","sql","grammaire"]:
             self.prompt = self.logo+'%s> ' % inp
-            self.mode= inp
+            self.mode = inp
         else:
             print("This is note a mode")
             print("Availiable modes: normal, union, sql, grammaire")
 
     def do_logo(self, inp):
-        self.logo= inp+"|"
+        self.logo = inp+"|"
         self.prompt = self.logo+'%s> ' % self.mode
 
     def do_export(self, inp):
         """to do an 'export to csv/gephy' """
-        tab= inp.split(" ")
+        tab = inp.split(" ")
         if len(tab) == 3 and tab[0] == "to" and tab[1] in ["csv", "gephy"]:
             if inp.find(".csv") == -1:
                 inp += ".csv"
-            toCSV(tab[2],tab[1])
+            toCSV(tab[2], tab[1])
         else:
             print("Bad sytax. \nRight format: 'export to [format] [name]'")
             print("[format]: csv or gephy")
 
     def do_import(self, inp):
-        tab= inp.split(" ")
-        if tab[0] == "csv":
-            fromCSV(tab[1]) 
-        elif tab[0] == "predicat":
+        tab = inp.split(" ")
+        if tab[0] == "predicat_csv":
+            fromCSV(tab[1])
+        elif tab[0] == "predicat_script":
             fromPredicatFile(self, tab[1])
-        elif tab[0] == "csvtable":
+        elif tab[0] == "csv_table":
+            "csvtable [csv_file] id [column_name]"
             if len(tab) == 4 and tab[2] == "id":
-                csvfile= tab[1]
-                entity= csvfile.replace(".csv","")
-                columnid= tab[3]
+                csvfile = tab[1]
+                entity = csvfile.replace(".csv", "")
+                columnid = tab[3]
                 fromCSVTable(csvfile, columnid, entity)
-
-    def do_test(self, inp):
-        commands = db.sqlQuery("select body from rules where body like '%print%'")
-        for command in commands:
-            run(command[0])
+            else:
+                print(f"failed to import {tab[1]}")
+                print("you must write: 'csvtable [csv_file] id [column_name]'")
+        else:
+            print("Data importation")
+            print("Possible importations: predicat_csv, predicat_script, csv_table")
+            print("Exemples:")
+            print("> import predicat_csv [predicat_csv_file]")
+            print("> import predicat_script [predicat_script_file]")
+            print("> import csv_table [csv_file] id [column_name]")
 
     def do_reset(self, inp):
         db.sqlModify("DELETE FROM facts")
@@ -93,6 +102,14 @@ class MyPrompt(Cmd):
                     db.createContext(tab[1])
                 else:
                     print("error: you must specify an context table name")
+
+    def do_macro(params):
+        '''
+        macro [name] [body]
+        macro list
+        macro delete [name]
+        '''
+        pass
 
     def completedefault(self, text, line, begidx, endidx):
         table = db.getDefaultTable()

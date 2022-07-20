@@ -1,9 +1,11 @@
 from commands import *
 from functools import reduce
 
+
 def dataPrint(dataFrame):
     concatenation = lambda x: print(",".join(x))
     dataFrame.apply(concatenation, axis=1)
+
 
 def run(inp):
     """run a command. Two cases:
@@ -13,16 +15,13 @@ def run(inp):
     db.clearHistory()
     first, rest = getFirstWord(inp)
     if first == "rule":
-        rest= runRule(rest)
+        rest = runRule(rest)
         subRun(rest)
-    elif first == "node":
-        print(db.getNodes())
-    elif first == "link":
-        print(db.getLinks())
     else:
         val = runCommand(inp)
         print(val)
         propagation()
+
 
 def runFromExternal(inp):
     """like run but print the results differently for a cli purpose"""
@@ -30,7 +29,7 @@ def runFromExternal(inp):
     db.clearHistory()
     first, rest = getFirstWord(inp)
     if first == "rule":
-        rest= runRule(rest)
+        rest = runRule(rest)
         subRun(rest)
     elif first == "node":
         dataPrint(db.getNodes())
@@ -40,6 +39,7 @@ def runFromExternal(inp):
         val = runCommand(inp)
         dataPrint(val)
         propagation()
+
 
 def runRule(rest):
     rest= syntaxSugarRule(rest)
@@ -57,6 +57,7 @@ def runRule(rest):
         db.addRules("'inference'", values[0], values[1], values[2], exp)
         res = exp
     return res
+
 
 def removeCommandsAndConnectors(exp):
     """get an expression and replace each commande by a ','"""
@@ -80,35 +81,85 @@ def cleanTripletsValue(tripletsValue):
         res.append([x for x in line if x != ""])
     return res
 
+
 def filterVariables(exp):
     """get an expression, separate each part and remove variables"""
-    exp= removeCommandsAndConnectors(exp)
-    tab= exp.split(" , ")
-    triplets= list(filter(lambda z: not z == None, map(lambda x: x.split(" ") if x.count(" ") == 2 else None, tab)))
+    exp = removeCommandsAndConnectors(exp)
+    tab = exp.split(" , ")
+    triplets = list(filter(lambda z: not z == None, map(lambda x: x.split(" ") if x.count(" ") == 2 else None, tab)))
     # Do not remove (make the reduce fuction in the lin 57 work properly)
     triplets.append(["A", "A", "A"])
     tripletsValue = list(map(lambda x: getValueOnly(x), triplets))
     return cleanTripletsValue(np.array(tripletsValue).T)
 
-def runCommand(inp):
-    inp = syntaxSugarCommand(inp)
-    commands= parser.parse(inp)
-    entry= VOIDENTRY
-    for c in commands:
-        entry= execute(entry,c)
-    return entry # TODO modify the returned entry (perhaps a matrix or still a df)
 
-def execute(entry, c):
-    funct= FUNCTIONCOMMANDS.get(c[0], "null")
-    if funct != "null":
-        entry= funct(entry, c[1])
-    else:
-        entry= VOIDENTRY
+def runCommand(inp):
+    # check A grade lt append (check $1 engagement B) (A) (B) append (check $1 $2 C) (A,B) (C)
+    inp = syntaxSugarCommand(inp)
+    commands = parser.parse(inp)
+    entry = VOIDENTRY
+    for c in commands:
+        '''On traite les commandes exec et append ici
+        sinon on a pas les moyens de faire d'appel à runCommand dans le context'''
+        if c[0] == "exec":
+            command = c[1][0]
+            parameters = c[1][1]
+            if parameters == "":
+                entry = runCommand(command)
+            else:
+                entry = runParametrizedCommand(entry, parameters, command)
+        elif c[0] == "append":
+            command = c[1][0]
+            parameters = c[1][1]
+            columns = c[1][2]
+            if parameters == "":
+                entry = runCommand(command)[parameters.split(",")+columns.split(",")]
+            else:
+                entry = runParametrizedCommand(entry, parameters, command)[parameters.split(",")+columns.split(",")]
+        else:
+            entry = execute(entry, c)
     return entry
 
+
+def get_dataframe_from_line(line):
+    return line[1]
+
+
+def run_command_with_parameters(command, serie):
+    for i in range(len(serie)):
+        val = serie[i]
+        command = command.replace(f"${i+1}", f"{val}")
+    entry = runCommand(command)
+    return entry
+
+
+def runParametrizedCommand(entry, parameters, command):
+    parameters = parameters.split(",")
+    selected_entry = entry[parameters]
+    data = []
+    for line in selected_entry.iterrows():
+        line = get_dataframe_from_line(line)
+        df = run_command_with_parameters(command, line)
+        for p, l in zip(parameters, line):
+            df[p] = l
+        data.append(df)
+    final = pd.concat(data)
+    return final
+
+
+def execute(entry, c):
+    funct = FUNCTIONCOMMANDS.get(c[0], "null")
+    if funct != "null":
+        entry = funct(entry, c[1])
+    else:
+        entry = VOIDENTRY
+    return entry
+
+
 def getFirstWord(exp):
-     tab= exp.split(" ")
-     return tab[0], " ".join(tab[1:])
+    tab = exp.split(" ")
+    return tab[0], " ".join(tab[1:])
+
 
 def getRules(hist):
     """This function transform the history in a list of corresponding rules"""
@@ -126,6 +177,7 @@ def noneIfNotTriplet(hist):
         res = None
     return res
 
+
 def propagation():
     """launch rules according to the history of event (add)"""
     historyUnformated = db.getHistory(db.getStage())
@@ -134,6 +186,7 @@ def propagation():
     db.addStage()
     for rule in rules:
         subRun(rule)
+
 
 def subRun(inp):
     """run a command link run but dont clear history. Two cases:
@@ -146,11 +199,12 @@ def subRun(inp):
         runCommand(first+" "+rest)
     propagation()
 
+
 def syntaxSugarCommand(command):
     first, rest = getFirstWord(command)
     if first == "delete":
         if isSet(rest):
-            command= "check "+rest+" "+command+" "+"delete "+rest+" "+command
+            command = "check "+rest+" "+command+" "+"delete "+rest+" "+command
     elif first == "display":
         if rest == "all":
             command = "check A B C display A B C"
@@ -161,9 +215,10 @@ def syntaxSugarCommand(command):
             command = "check A B C"
     return command
 
+
 def syntaxSugarRule(rule):
     first, rest = getFirstWord(rule)
     if first == "if":
         if " then " in rest:
-            rule= "check "+rest.replace(" then ", " add ")
+            rule = "check "+rest.replace(" then ", " add ")
     return rule

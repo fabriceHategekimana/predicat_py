@@ -34,7 +34,8 @@ def unique(mylist):
 def addNodes(net, facts):
     nodeList = unique(getColumn(0, facts)+getColumn(2, facts))
     for n in nodeList:
-        default = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd5%2FRond_bleu_ciel.png%2F120px-Rond_bleu_ciel.png&f=1&nofb=1"
+        # default = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fd%2Fd5%2FRond_bleu_ciel.png%2F120px-Rond_bleu_ciel.png&f=1&nofb=1"
+        default = "file:///home/fabrice/Images/shape/hexagone.png"
         link = IMAGES.get(n, default)
         net.add_node(n, shape="image", image=link)
 

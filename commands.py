@@ -7,7 +7,8 @@ import csv
 import re
 
 db = Data()
-VOIDENTRY =  pd.DataFrame()
+VOIDENTRY = pd.DataFrame()
+
 
 def toIntIfPossible(val):
     try:
@@ -24,6 +25,7 @@ def formatColumn_old(x, val, columns):
         res = toIntIfPossible(val)
     return res
 
+
 def formatColumn(x, val, columns):
     if val in columns:   # if it's a variable
         res = toIntIfPossible(x[columns.index(val)])
@@ -31,11 +33,13 @@ def formatColumn(x, val, columns):
         res = toIntIfPossible(val)
     return res
 
+
 def isComparator(element):
     res = False
     if element in ["<", ">", "<=", ">=", "==", "equal", "notequal"]:
         res = True
     return res
+
 
 def isVariable(element):
     if element in ["equal", "notequal"]:
@@ -43,11 +47,12 @@ def isVariable(element):
     else:
         val = parser.parse(element)
         if val == None:
-            val = ("element","failed")
+            val = ("element", "failed")
         res = False
         if val[0] == "variable":
             res = True
     return res
+
 
 def isSet(element):
     val = parser.parse(element)
@@ -55,6 +60,7 @@ def isSet(element):
     if val[0] == "set":
         res = True
     return res
+
 
 def setToSQL(set_fact, target="default"):
     triplet = set_fact[1:]
@@ -116,6 +122,7 @@ def valueOrVariable(entry, set_value):
             res = [set_value]
     return res
 
+
 def createFacts(entry, set_values):
     """set_values: triplet of [subject,link,goal]"""
     df = pd.DataFrame({})
@@ -155,10 +162,7 @@ def check(entry, value):
         target = db.getDefaultTable()
         query = f"select * from facts_{target} where subject = '"+value[1]+"' and link = '"+value[2]+"' and goal = '"+value[3]+"';"
         variables = []
-    else:
-        pass
     return pd.DataFrame(db.sqlQuery(query), columns=variables)
-    # return entry
 
 
 def add(entry, value):
@@ -188,27 +192,27 @@ def delete(entry, value):
 def myFilter(entry, value):
     if entry.shape[0] > 0:
         for val in value[1]:
-           typeConverter = str
-           if val[1] == "equal":
-               val = (val[0], " == ", val[2])
-           elif val[1] == "notequal":
-               val = (val[0], " != ", val[2])
-           elif val[1] == "contains":
-               val = (val[0], " contains ", val[2])
-           else:
-               typeConverter= int
+            typeConverter = str
+            if val[1] == "equal":
+                val = (val[0], " == ", val[2])
+            elif val[1] == "notequal":
+                val = (val[0], " != ", val[2])
+            elif val[1] == "contains":
+                val = (val[0], " contains ", val[2])
+            else:
+                typeConverter = int
 
-           # int/string conversion
-           if isVariable(val[0]):
-               entry[val[0]] = entry[val[0]].map(typeConverter)
-           if isVariable(val[2]):
-               entry[val[2]] = entry[val[2]].map(typeConverter)
+            # int/string conversion
+            if isVariable(val[0]):
+                entry[val[0]] = entry[val[0]].map(typeConverter)
+            if isVariable(val[2]):
+                entry[val[2]] = entry[val[2]].map(typeConverter)
 
-           # special case for the contains query
-           if val[1] == " contains ":
-               entry = entry[entry[val[0]].str.contains(val[2],case=False)]
-           else:
-               entry = entry.query("".join(val))
+            # special case for the contains query
+            if val[1] == " contains ":
+                entry = entry[entry[val[0]].str.contains(val[2], case=False)]
+            else:
+                entry = entry.query("".join(val))
     return entry
 
 
@@ -242,7 +246,44 @@ def myPrint(entry, value):
     return VOIDENTRY
 
 
-def count(entry, sentence):
+def to_float(text):
+    try:
+        val = float(text)
+    except:
+        val = 0.0
+    return val
+
+
+def myMax(entry, value):
+    val = entry[value].map(to_float).max()
+    return pd.DataFrame([val], columns=["max"])
+
+
+def myMin(entry, value):
+    val = entry[value].map(to_float).min()
+    return pd.DataFrame([val], columns=["min"])
+
+
+def myMean(entry, value):
+    val = entry[value].map(to_float).mean()
+    return pd.DataFrame([val], columns=["mean"])
+
+
+def myResume(entry, value):
+    max_val = entry[value].map(to_float).max()
+    min_val = entry[value].map(to_float).min()
+    mean_val = entry[value].map(to_float).mean()
+    return pd.DataFrame([[min_val, max_val, mean_val]], columns=["min", "max", "mean"])
+
+
+def count(entry, value):
+    line_nb = entry.shape[0]
+    return pd.DataFrame([line_nb], columns=["count"])
+
+
+# deprecated
+def countis(entry, sentence):
+    print(str(entry.shape[0])+sentence[0]+sentence[1])
     if eval(str(entry.shape[0])+sentence[0]+sentence[1]):
         return entry
     else:
@@ -276,13 +317,18 @@ def rename(entry, value):
     """value = [[node|link],arg1, ..., argn]"""
     table = db.getDefaultTable()
     if value[0] == "node":
-       db.sqlModify(f"UPDATE facts_{table} SET subject='{value[2]}' WHERE subject='{value[1]}'") 
-       db.sqlModify(f"UPDATE facts_{table} SET goal='{value[2]}' WHERE goal='{value[1]}'") 
+        db.sqlModify(f"UPDATE facts_{table} SET subject='{value[2]}' WHERE subject='{value[1]}'") 
+        db.sqlModify(f"UPDATE facts_{table} SET goal='{value[2]}' WHERE goal='{value[1]}'") 
     elif value[0] == "link":
-       db.sqlModify(f"UPDATE facts_{table} SET link='{value[2]}' WHERE link='{value[1]}'")
+        db.sqlModify(f"UPDATE facts_{table} SET link='{value[2]}' WHERE link='{value[1]}'")
     else:
-       print("error, the target is note even a node or a link")
+        print("error, the target is note even a node or a link")
     return entry
+
+
+def myCalc(entry, value):
+    val = eval(value.replace('"',''))
+    return pd.DataFrame([val], columns=["calc"])
 
 
 FUNCTIONCOMMANDS = {
@@ -293,12 +339,20 @@ FUNCTIONCOMMANDS = {
         "csv": myCsv,
         "display": display,
         "print": myPrint,
+        "countis": countis,
         "count": count,
         "check_from": check_from,
         "select": select,
         "reference": reference,
-        "rename": rename
+        "rename": rename,
+        "max": myMax,
+        "min": myMin,
+        "mean": myMean,
+        "resume": myResume,
+        "calc": myCalc
         }
 
 entr = pd.DataFrame({"A": ["pierre"], "B": ["ami"], "C": ["anne"]})
 delete(entr, ('fact', 'pierre', 'ami', 'anne'))
+
+
