@@ -3,8 +3,6 @@ from db2 import *
 from run import *
 from import_module import *
 
-MACROS = pd.DataFrame({"name": [], "body": []})
-
 
 # version 2
 class MyPrompt(Cmd):
@@ -32,7 +30,7 @@ class MyPrompt(Cmd):
         return True
 
     def do_mode(self, inp):
-        if inp in ["normal","union","sql","grammaire"]:
+        if inp in ["normal", "union", "sql", "grammaire"]:
             self.prompt = self.logo+'%s> ' % inp
             self.mode = inp
         else:
@@ -103,13 +101,25 @@ class MyPrompt(Cmd):
                 else:
                     print("error: you must specify an context table name")
 
-    def do_macro(params):
-        '''
-        macro [name] [body]
+    def do_macro(self, inp):
+        help_info = '''
         macro list
+        macro get [name]
+        macro add [name] [body]
         macro delete [name]
         '''
-        pass
+        params = inp.split(" ")
+        if inp == "":
+            print(help_info)
+        elif params[0] == "list":
+            print(db.getMacroList())
+        elif params[0] == "delete":
+            db.deleteMacro(params[1])
+        elif params[0] == "add":
+            db.addMacro(params[1], " ".join(params[2:]))
+        elif params[0] == "get":
+            macro = db.getMacro(params[1])
+            print(macro)
 
     def completedefault(self, text, line, begidx, endidx):
         table = db.getDefaultTable()

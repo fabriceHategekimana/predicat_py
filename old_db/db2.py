@@ -24,12 +24,6 @@ CREATE_HISTORICAL = """ CREATE TABLE historical(
                             PRIMARY KEY (event)); 
                     """
 
-
-CREATE_MACRO = """ CREATE TABLE macro(
-                            "name" TEXT,
-                            "body" TEXT);
-                    """
-
 CREATE_STAGE = """
 CREATE TABLE stage("stage" TEXT); 
 """
@@ -50,7 +44,6 @@ CREATE UNIQUE INDEX historical_event on historical (event);
 
 INITIALYZE_STAGE = """insert into stage (stage) values (0)"""
 INITIALYZE_CONTEXT = """insert into context (name) values ('default')"""
-
 
 class Data(): 
     nom="data.db"
@@ -85,7 +78,6 @@ class Data():
            self.c.execute(CREATE_FACTS) 
            self.c.execute(CREATE_RULES) 
            self.c.execute(CREATE_HISTORICAL) 
-           self.c.execute(CREATE_MACRO) 
            self.c.execute(CREATE_STAGE) 
            self.c.execute(CREATE_CONTEXT) 
            self.c.execute(INITIALYZE_STAGE) 
@@ -252,14 +244,4 @@ class Data():
         contexts[0] += ","+name
         self.sqlModify("update context set name='"+contexts[0]+"'")
 
-    def addMacro(self, name, body):
-        self.sqlModify(f"insert into macro (name, body) values ('{name}', '{body}')")
 
-    def getMacro(self, name):
-        return self.sqlQuery(f"select body from macro where name == '{name}'")
-
-    def deleteMacro(self, name):
-        self.sqlModify(f"delete from macro where name == '{name}'")
-
-    def getMacroList(self):
-        return self.sqlQuery(f"select * from macro")

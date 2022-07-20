@@ -42,16 +42,16 @@ def runFromExternal(inp):
 
 
 def runRule(rest):
-    rest= syntaxSugarRule(rest)
+    rest = syntaxSugarRule(rest)
     first, rest = getFirstWord(rest)
-    res= "check void void void"
+    res = "check void void void"
     if first == "delete":
-        ruleIds= rest.split(" ")
+        ruleIds = rest.split(" ")
         db.deleteRules(ruleIds)
     elif first == "":
         for rule in db.getRules():
             print(rule)
-    else: #if we add an expression
+    else:  #if we add an expression
         exp = first+" "+rest
         values = filterVariables(rest)
         db.addRules("'inference'", values[0], values[1], values[2], exp)
@@ -67,13 +67,15 @@ def removeCommandsAndConnectors(exp):
     commandsAndConnectors = commands+connectors
     return " ".join(list(map(lambda x: "," if x in commandsAndConnectors else x, tab)))
 
+
 def getValueOnly(tab):
     """delete all the variables in a given list"""
-    triplet= ["", "", ""]
+    triplet = ["", "", ""]
     for i in range(3):
         if not isVariable(tab[i]) and not isComparator(tab[i]):
             triplet[i] += tab[i]
     return triplet
+
 
 def cleanTripletsValue(tripletsValue):
     res = []
@@ -93,17 +95,32 @@ def filterVariables(exp):
     return cleanTripletsValue(np.array(tripletsValue).T)
 
 
+def is_element(command):
+    if command[0] == "element":
+        return True
+    else:
+        return False
+
+
+def format_command(command):
+    if is_element(command):
+        command = db.getMacro(command[1])[0][0]
+    return command
+
+
 def runCommand(inp):
     # check A grade lt append (check $1 engagement B) (A) (B) append (check $1 $2 C) (A,B) (C)
+    # check A species B select A append [calc ($1+1)] [A] [C]
     inp = syntaxSugarCommand(inp)
     commands = parser.parse(inp)
     entry = VOIDENTRY
     for c in commands:
-        '''On traite les commandes exec et append ici
-        sinon on a pas les moyens de faire d'appel à runCommand dans le context'''
+        '''On traite en premier lieu les expresion de degré superieur
+        exec et append'''
         if c[0] == "exec":
             command = c[1][0]
             parameters = c[1][1]
+            command = format_command(command)
             if parameters == "":
                 entry = runCommand(command)
             else:
@@ -112,6 +129,7 @@ def runCommand(inp):
             command = c[1][0]
             parameters = c[1][1]
             columns = c[1][2]
+            command = format_command(command)
             if parameters == "":
                 entry = runCommand(command)[parameters.split(",")+columns.split(",")]
             else:
@@ -125,25 +143,35 @@ def get_dataframe_from_line(line):
     return line[1]
 
 
-def run_command_with_parameters(command, serie):
-    for i in range(len(serie)):
-        val = serie[i]
+def replace_parameter_by_value2(command, values, parameters):
+    i = 0
+    for p in parameters:
+        val = values[p]
         command = command.replace(f"${i+1}", f"{val}")
+        i += 1
+    return command
+
+
+def run_command_with_parameters(command, serie, parameters):
+    command = replace_parameter_by_value2(command, serie, parameters)
+    # command = replace_parameter_by_value(command, serie)
     entry = runCommand(command)
     return entry
 
 
+# TODO à déselectionner la ligne 160
 def runParametrizedCommand(entry, parameters, command):
     parameters = parameters.split(",")
-    selected_entry = entry[parameters]
+    # selected_entry = entry[parameters]
+    selected_entry = entry
     data = []
     for line in selected_entry.iterrows():
         line = get_dataframe_from_line(line)
-        df = run_command_with_parameters(command, line)
+        df = run_command_with_parameters(command, line, parameters)
         for p, l in zip(parameters, line):
             df[p] = l
         data.append(df)
-    final = pd.concat(data)
+    final = pd.concat(data, ignore_index=True)
     return final
 
 
@@ -166,10 +194,11 @@ def getRules(hist):
     triplets = list(map(lambda x: x.split(" "), hist))
     rulesUnformated = list(map(lambda x: db.getRulesByArgs(x[0], x[1], x[2]), triplets))
     if rulesUnformated != []:
-        rules = list(reduce(lambda x,y: x+y, rulesUnformated))
+        rules = list(reduce(lambda x, y: x+y, rulesUnformated))
     else:
         rules = rulesUnformated
     return rules
+
 
 def noneIfNotTriplet(hist):
     res = hist

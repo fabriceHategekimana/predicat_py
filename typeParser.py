@@ -27,7 +27,8 @@ reserved = {
         "resume": "RESUME",
         "calc": "CALC",
         "exec": "EXEC",
-        "append": "APPEND"
+        "append": "APPEND",
+        "shuffle": "SHUFFLE"
         }
 
 # List of token names.   This is always required
@@ -36,13 +37,22 @@ tokens = [
    'NAME',
    'STRING',
    'PARENTHESE',
+   'CROCHET',
+   'ACCOLADE',
    'PARAMETER',
    'VAR',
    'EQUAL',
    'INF',
    'SUP',
    'PRED',
-   'DOT'
+   'DOT',
+   'PLUS',
+   'OP',
+   'CP',
+   'OB',
+   'CB',
+   'OSB',
+   'CSB'
 ]+list(reserved.values())
 
 # A regular expression rule with some action code
@@ -74,6 +84,16 @@ def t_PARENTHESE(t):
     return t
 
 
+def t_CROCHET(t):
+    r'\[([^\]\n])*\]'
+    return t
+
+
+def t_ACCOLADE(t):
+    r'{([^}\n])*}'
+    return t
+
+
 def t_PARAMETER(t):
     r'\$\d'
     return t
@@ -85,6 +105,13 @@ t_EQUAL = r'='
 t_INF = r'<'
 t_SUP = r'>'
 t_DOT = r'\.'
+t_PLUS = r'\+'
+t_OP = r'\('
+t_CP = r'\)'
+t_OSB = r'\['
+t_CSB = r'\]'
+t_OB = r'{'
+t_CB = r'}'
 t_ignore = ' \t'
 
 
@@ -137,38 +164,56 @@ def p_cmd(p):
            | ADD type
            | DELETE type
            | FILTER comparators
+           | EXEC contour
+           | EXEC element
+           | EXEC contour contour
+           | EXEC element contour
+           | APPEND contour contour
+           | APPEND element contour
+           | APPEND contour contour contour
+           | APPEND element contour contour
            | CSV csvfile
            | DISPLAY content
            | PRINT STRING
            | COUNTIS compnextelement
            | COUNT
+           | SHUFFLE
            | MEAN VAR
            | MAX VAR
            | MIN VAR
            | RESUME VAR
-           | CALC STRING
-           | EXEC PARENTHESE
-           | EXEC PARENTHESE PARENTHESE
-           | APPEND PARENTHESE PARENTHESE
-           | APPEND PARENTHESE PARENTHESE PARENTHESE
+           | CALC contour
+           | CALC contour contour
            | SELECT variables
            | REFERENCE element
            | RENAME args
            '''
     if p[1] == "exec":
         if len(p[1:]) == 2:
-            p[0] = ("exec", (p[2][1:-1], ""))
+            p[0] = ("exec", (p[2], ""))
         else:
-            p[0] = ("exec", (p[2][1:-1], p[3][1:-1]))
-    if p[1] == "append":
+            p[0] = ("exec", (p[2], p[3]))
+    elif p[1] == "append":
         if len(p[1:]) == 3:  # (expression, variables, columns)
-            p[0] = ("append", (p[2][1:-1], "", p[3][1:-1]))
+            p[0] = ("append", (p[2], "", p[3]))
         else:
-            p[0] = ("append", (p[2][1:-1], p[3][1:-1], p[4][1:-1]))
+            p[0] = ("append", (p[2], p[3], p[4]))
+    elif p[1] == "calc":
+        if len(p[1:]) == 2:
+            p[0] = ("calc", (p[2], ""))
+        else:
+            p[0] = ("calc", (p[2], p[3]))
     elif len(p[1:]) < 2:
         p[0] = (p[1], "void")
     else:
         p[0] = (p[1], p[2])
+
+
+def p_contour(p):
+    '''contour : PARENTHESE
+               | CROCHET
+               | ACCOLADE'''
+    p[0] = p[1][1:-1]
 
 
 def p_content1(p):

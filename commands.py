@@ -232,6 +232,7 @@ def display(entry, value):
         displayNetwork(facts.values)
     return entry
 
+
 def fromTextToList(entry, sentence):
     tab = sentence.replace('"', '').split(" ")
     df = pd.DataFrame({})
@@ -326,9 +327,33 @@ def rename(entry, value):
     return entry
 
 
+def replace_parameter_by_value(command, values):
+    for i in range(len(values)):
+        val = values[i]
+        command = command.replace(f"${i+1}", f"{val}")
+    return command
+
+
 def myCalc(entry, value):
-    val = eval(value.replace('"',''))
-    return pd.DataFrame([val], columns=["calc"])
+    expression = value[0]
+    columns = value[1].split(",")
+    computed_column = []
+    if columns == [""]:
+        val = eval(expression)
+        return pd.DataFrame([val], columns=["calc"])
+    else:
+        for line in entry[columns].iterrows():
+            new_expression = replace_parameter_by_value(expression, line[1])
+            computed_column.append(eval(new_expression))
+    return pd.DataFrame(computed_column, columns=["calc"])
+
+
+def mySort(entry, value):
+    return entry
+
+
+def myShuffle(entry, value):
+    return entry.sample(frac=1)
 
 
 FUNCTIONCOMMANDS = {
@@ -349,10 +374,10 @@ FUNCTIONCOMMANDS = {
         "min": myMin,
         "mean": myMean,
         "resume": myResume,
-        "calc": myCalc
+        "calc": myCalc,
+        "sort": mySort,
+        "shuffle": myShuffle
         }
 
 entr = pd.DataFrame({"A": ["pierre"], "B": ["ami"], "C": ["anne"]})
 delete(entr, ('fact', 'pierre', 'ami', 'anne'))
-
-
