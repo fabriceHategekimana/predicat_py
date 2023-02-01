@@ -1,6 +1,18 @@
 import ply.lex as lex
 import ply.yacc as yacc
 
+
+def remove_element_if_exists(x):
+    if x[0] == "element":
+        return x[1]
+    else:
+        return x
+
+
+def tuple_format(param_list):
+    return tuple(map(remove_element_if_exists, param_list))
+
+
 reserved = {
         "not": "NOT",
         "and": "AND",
@@ -14,7 +26,6 @@ reserved = {
         "csv": "CSV",
         "display": "DISPLAY",
         "print": "PRINT",
-        "countis": "COUNTIS",
         "count": "COUNT",
         "checkfrom": "CHECKFROM",
         "select": "SELECT",
@@ -27,18 +38,30 @@ reserved = {
         "resume": "RESUME",
         "calc": "CALC",
         "exec": "EXEC",
-        "append": "APPEND",
-        "shuffle": "SHUFFLE"
+        "shuffle": "SHUFFLE",
+        "dt": "DATE",
+        "float": "FLOAT",
+        "str": "STR",
+        "map": "MAP",
+        "slice": "SLICE",
+        "list": "LIST",
+        "clear": "CLEAR",
+        "sum": "SUM",
+        "limit": "LIMIT",
+        "sort": "SORT",
+        "links": "LINKS",
+        "plot": "PLOT",
+        "all": "ALL"
         }
 
 # List of token names.   This is always required
 tokens = [
-   'NUMBER',
    'NAME',
    'STRING',
    'PARENTHESE',
    'CROCHET',
    'ACCOLADE',
+   'NUMBER',
    'PARAMETER',
    'VAR',
    'EQUAL',
@@ -47,6 +70,7 @@ tokens = [
    'PRED',
    'DOT',
    'PLUS',
+   'MINUS',
    'OP',
    'CP',
    'OB',
@@ -59,17 +83,17 @@ tokens = [
 
 
 def t_STRING(t):
-    r'"([^"\n])*"'
+    r'"([^"])*"'
     return t
 
 
 def t_NUMBER(t):
-    r'\d+'
+    r'-?\d*\.?\d+'
     return t
 
 
 def t_NAME(t):
-    r'([a-zA-Zà]\w+ | [a-zà])'
+    r'([a-zA-Zà@]\w+ | [a-zà@])'
     t.type = reserved.get(t.value, 'NAME')
     return t
 
@@ -80,17 +104,17 @@ def t_VAR(t):
 
 
 def t_PARENTHESE(t):
-    r'\(([^)\n])*\)'
+    r'\(([^\)])*\)'
     return t
 
 
 def t_CROCHET(t):
-    r'\[([^\]\n])*\]'
+    r'\[([^\]])*\]'
     return t
 
 
 def t_ACCOLADE(t):
-    r'{([^}\n])*}'
+    r'{([^}])*}'
     return t
 
 
@@ -106,6 +130,7 @@ t_INF = r'<'
 t_SUP = r'>'
 t_DOT = r'\.'
 t_PLUS = r'\+'
+t_MINUS = r'\-'
 t_OP = r'\('
 t_CP = r'\)'
 t_OSB = r'\['
@@ -160,22 +185,21 @@ def p_mcmd1(p):
 
 def p_cmd(p):
     '''cmd : CHECK type
-           | CHECKFROM name_type
+           | CHECK ALL
            | ADD type
            | DELETE type
            | FILTER comparators
+           | DATE contour
+           | DATE NAME contour
+           | FLOAT contour
+           | STR contour
            | EXEC contour
-           | EXEC element
+           | EXEC NAME
            | EXEC contour contour
-           | EXEC element contour
-           | APPEND contour contour
-           | APPEND element contour
-           | APPEND contour contour contour
-           | APPEND element contour contour
+           | EXEC NAME contour
            | CSV csvfile
            | DISPLAY content
-           | PRINT STRING
-           | COUNTIS compnextelement
+           | PRINT contour
            | COUNT
            | SHUFFLE
            | MEAN VAR
@@ -183,28 +207,35 @@ def p_cmd(p):
            | MIN VAR
            | RESUME VAR
            | CALC contour
+           | CALC NAME contour
            | CALC contour contour
-           | SELECT variables
+           | CALC NAME contour contour
+           | SELECT contour
+           | SELECT element contour
            | REFERENCE element
-           | RENAME args
+           | RENAME NAME contour contour
+           | RENAME NAME element element
+           | MAP ADD contour contour
+           | MAP contour contour
+           | SLICE contour contour
+           | LIST contour
+           | LIST NAME contour
+           | CLEAR
+           | SUM VAR
+           | SUM contour
+           | LIMIT NUMBER
+           | SORT contour
+           | LINKS contour
+           | PLOT contour
            '''
-    if p[1] == "exec":
-        if len(p[1:]) == 2:
-            p[0] = ("exec", (p[2], ""))
-        else:
-            p[0] = ("exec", (p[2], p[3]))
-    elif p[1] == "append":
-        if len(p[1:]) == 3:  # (expression, variables, columns)
-            p[0] = ("append", (p[2], "", p[3]))
-        else:
-            p[0] = ("append", (p[2], p[3], p[4]))
-    elif p[1] == "calc":
-        if len(p[1:]) == 2:
-            p[0] = ("calc", (p[2], ""))
-        else:
-            p[0] = ("calc", (p[2], p[3]))
-    elif len(p[1:]) < 2:
-        p[0] = (p[1], "void")
+    if isinstance(p[1], tuple) and p[1][0] == "element":
+        p[0] = ("exec", (p[1][1], p[2]))
+    elif len(p[1:]) == 2 and p[1] in ["calc", "exec"]:
+        p[0] = (p[1], (remove_element_if_exists(p[2]), ""))
+    elif len(p[1:]) == 1:
+        p[0] = (p[1], "")
+    elif len(p[1:]) > 2:
+        p[0] = (p[1], tuple_format(p[2:]))
     else:
         p[0] = (p[1], p[2])
 

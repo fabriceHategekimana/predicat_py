@@ -1,0 +1,29 @@
+@startuml
+scale 10
+
+actor analyst
+
+package predicat {
+	package interface {
+		usecase manage_data
+		usecase manage_graph
+		usecase manage_rule
+	}
+
+	package verbs {
+		usecase create
+		usecase delete
+		usecase modify
+		usecase view
+	}
+}
+
+analyst --> manage_data
+analyst --> manage_graph
+analyst --> manage_rule
+
+manage_data ..> verbs 
+manage_graph ..> verbs 
+manage_rule ..> verbs 
+
+@enduml

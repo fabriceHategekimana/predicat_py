@@ -5,6 +5,8 @@ from db2 import Data
 from network import displayNetwork
 import csv
 import re
+import datetime
+import matplotlib.pyplot as plt
 
 db = Data()
 VOIDENTRY = pd.DataFrame()
@@ -153,8 +155,12 @@ def substitute(entry, set_values):
 
 
 def check(entry, value):
+    query = ""
     # check type
-    if value[0] == "set":
+    if value == "all":
+        query = "select * from facts_default;"
+        variables = find_next_letter(entry, 3)
+    elif value[0] == "set":
         res = list(map(setToSQL, value[1]))
         query = "select * from "+" natural join ".join(res)+";"
         variables = unique(flatList(list(map(getVariables, value[1]))))
@@ -162,7 +168,10 @@ def check(entry, value):
         target = db.getDefaultTable()
         query = f"select * from facts_{target} where subject = '"+value[1]+"' and link = '"+value[2]+"' and goal = '"+value[3]+"';"
         variables = []
-    return pd.DataFrame(db.sqlQuery(query), columns=variables)
+    if query != "":
+        return pd.DataFrame(db.sqlQuery(query), columns=variables)
+    else:
+        return entry
 
 
 def add(entry, value):
@@ -180,16 +189,16 @@ def add(entry, value):
 
 def delete(entry, value):
     """entry: list of tuple (negative, subject, link, goal)"""
-    if entry.shape[0] > 0:
-        if value[0] == "set":
-            facts = substitute(entry, value[1])
-        else:
-            facts = substitute(entry, [value])
-        db.deleteFacts(facts)
+    if entry.shape[0] > 0 and value[0] == "set":
+        facts = substitute(entry, value[1])
+    else:
+        facts = substitute(entry, [value])
+    db.deleteFacts(facts)
     return entry
 
 
 def myFilter(entry, value):
+    # val = ('comparators', [('b', 'contains', 'unavailable')])
     if entry.shape[0] > 0:
         for val in value[1]:
             typeConverter = str
@@ -243,7 +252,10 @@ def fromTextToList(entry, sentence):
 
 def myPrint(entry, value):
     if entry.shape[0] > 0:
-        print(fromTextToList(entry, value))
+        if entry.shape == (1, 1):
+            print(entry.iloc[0][0])
+        else:
+            print(fromTextToList(entry, value))
     return VOIDENTRY
 
 
@@ -251,7 +263,7 @@ def to_float(text):
     try:
         val = float(text)
     except:
-        val = 0.0
+        val = None
     return val
 
 
@@ -266,7 +278,7 @@ def myMin(entry, value):
 
 
 def myMean(entry, value):
-    val = entry[value].map(to_float).mean()
+    val = entry[value].map(float).mean()
     return pd.DataFrame([val], columns=["mean"])
 
 
@@ -274,7 +286,8 @@ def myResume(entry, value):
     max_val = entry[value].map(to_float).max()
     min_val = entry[value].map(to_float).min()
     mean_val = entry[value].map(to_float).mean()
-    return pd.DataFrame([[min_val, max_val, mean_val]], columns=["min", "max", "mean"])
+    count_val = entry[value].shape[0]
+    return pd.DataFrame([[min_val, max_val, mean_val, count_val]], columns=["min", "max", "mean", "count"])
 
 
 def count(entry, value):
@@ -282,25 +295,24 @@ def count(entry, value):
     return pd.DataFrame([line_nb], columns=["count"])
 
 
-# deprecated
-def countis(entry, sentence):
-    print(str(entry.shape[0])+sentence[0]+sentence[1])
-    if eval(str(entry.shape[0])+sentence[0]+sentence[1]):
-        return entry
+def mySum(entry, value):
+    sum_val = entry[value].map(to_float).sum()
+    return pd.DataFrame([sum_val], columns=["sum"])
+
+
+def parse_indices(index, entry):
+    if index.isnumeric():
+        return pd.DataFrame(entry.iloc[int(index)])
     else:
-        return VOIDENTRY
-
-
-def check_from(entry, value):
-    # ("check_from", name, type)
-    db.setDefaultTab(value[1])
-    return check(entry, value[2])
+        return entry[index.split(",")]
 
 
 def select(entry, value):
-    """will extract the given variables from the dataFrame"""
-    """value: [Var, Var, ...]"""
-    return entry[value].drop_duplicates()
+    if isinstance(value, tuple):
+        if value[0] == "distinct":
+            return parse_indices(value[1], entry).drop_duplicates()
+    else:
+        return parse_indices(value, entry)
 
 
 def reference(entry, value):
@@ -314,16 +326,32 @@ def reference(entry, value):
 
 
 def rename(entry, value):
-    """rename [node/link] name newname"""
-    """value = [[node|link],arg1, ..., argn]"""
     table = db.getDefaultTable()
     if value[0] == "node":
         db.sqlModify(f"UPDATE facts_{table} SET subject='{value[2]}' WHERE subject='{value[1]}'") 
         db.sqlModify(f"UPDATE facts_{table} SET goal='{value[2]}' WHERE goal='{value[1]}'") 
     elif value[0] == "link":
         db.sqlModify(f"UPDATE facts_{table} SET link='{value[2]}' WHERE link='{value[1]}'")
+    elif value[0] == "column":
+        olds = value[1].split(",")
+        news = value[2].split(",")
+        d = {}
+        for old, new in zip(olds, news):
+            d[old] = new
+        entry = entry.rename(columns=d)
     else:
-        print("error, the target is note even a node or a link")
+        # TODO lister les type d'erreur
+        if "," in value[0]:
+            old = "("+value[0]+")"
+            new = "("+value[1]+")"
+        else:
+            old = value[0]
+            new = value[1]
+        print("------------")
+        print("Bad target, you must specify a an existing target with the right spelling:")
+        print(f"Syntax: rename [target] {old} {new}")
+        print("Target can be: column,node,link")
+        print("------------")
     return entry
 
 
@@ -334,13 +362,27 @@ def replace_parameter_by_value(command, values):
     return command
 
 
+def format_expression(expression, entry):
+    nb_row = 1 if entry.empty else entry.shape[0]
+    elements = expression.split(" ")
+    symbol_list = []
+    for element in elements:
+        if element in entry.columns:
+            symbol_list.append(list(entry[element]))
+        else:
+            symbol_list.append([element]*nb_row)
+    return pd.DataFrame(symbol_list).sum()
+
+
 def myCalc(entry, value):
+    print(value)
     expression = value[0]
     columns = value[1].split(",")
     computed_column = []
     if columns == [""]:
-        val = eval(expression)
-        return pd.DataFrame([val], columns=["calc"])
+        expressions = format_expression(expression, entry)
+        values = expressions.map(eval)
+        return pd.DataFrame(values, columns=["calc"])
     else:
         for line in entry[columns].iterrows():
             new_expression = replace_parameter_by_value(expression, line[1])
@@ -349,11 +391,143 @@ def myCalc(entry, value):
 
 
 def mySort(entry, value):
-    return entry
+    columns = value.split(",")
+    return entry.sort_values(columns)
 
 
 def myShuffle(entry, value):
     return entry.sample(frac=1)
+
+
+def get_date(day):
+    today = datetime.date.today()
+    if day == "today":
+        return today
+    elif day == "tomorrow":
+        return datetime.date(today.year, today.month, today.day+1)
+    elif day == "yesterday":
+        return datetime.date(today.year, today.month, today.day-1)
+
+
+def format_date_column(column, entry):
+    nb_row = 1 if entry.empty else entry.shape[0]
+    if column in entry.columns:
+        return pd.to_datetime(entry[column])
+    elif column in ["today", "tomorrow", "yesterday"]:
+        date_list = [get_date(column)]*nb_row
+        df = pd.DataFrame(date_list, columns=[column])
+        return pd.to_datetime(df[column])
+    elif column.count("-") == 2:
+        date_list = [value]*nb_row
+        column = "date"
+        df = pd.DataFrame(date_list, columns=[column])
+        return  pd.to_datetime(df[column])
+
+
+def myDate(entry, value):
+    return entry
+    if isinstance(value, tuple):
+        if value[0] == "diff":
+            columns = value[1].split(",")
+            tab = []
+            left_dates = format_date_column(columns[0], entry)
+            right_dates = format_date_column(columns[1], entry)
+            for x, y in zip(left_dates, right_dates):
+                tab.append((x-y).days)
+            entry["diff"] = tab
+    else:
+        if value in ["today", "tomorrow", "yesterday"]:
+            date_value = get_date(value)
+            entry = pd.DataFrame([date_value], columns=[value])
+            entry[value] = pd.to_datetime(entry[value])
+        elif value.count("-") == 2:
+            entry = pd.DataFrame([value], columns=["date"])
+            entry["date"] = pd.to_datetime(entry["date"])
+        else:
+            columns = value.split(",")
+            for c in columns:
+                entry[c] = pd.to_datetime(entry[c])
+    return entry
+
+
+def myFloat(entry, value):
+    entry[value] = entry[value].map(to_float)
+    return entry
+
+
+def myString(entry, value):
+    entry[value] = entry[value].map(str)
+    return entry
+
+
+def find_next_letter(entry, number):
+    i = 0
+    variables = []
+    alphabetic_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    while len(variables) < number and i < len(alphabetic_list):
+        letter = "_"+alphabetic_list[i:i+1]
+        if letter not in entry.columns:
+            variables.append(letter)
+        i += 1
+    return variables
+
+
+def myMap(entry, value):
+    try:
+        if len(value) == 2:
+            entry[value[1]] = entry[value[1]].map(eval(value[0]))
+        elif len(value) == 3:
+            letter = find_next_letter(entry, 1)[0]
+            entry["map"] = entry[value[2]].map(eval(value[1]))
+    except:
+        print(f"Bad entry: '{value[0]}' isn't an existing function")
+    return entry
+
+
+def slicer(start, end):
+    return lambda x: x[start:end]
+
+
+def mySlice(entry, value):
+    interval = value[0].split(",")
+    entry[value[1]] = entry[value[1]].map(slicer(int(interval[0]), int(interval[1])))
+    return entry
+
+
+def myList(entry, value):
+    return entry
+    if isinstance(value, tuple):
+        values = value[1].split(",")
+        name = value[0]
+    else:
+        values = value.split(",")
+        name = "list"
+    if len(values) == entry.shape[0]:
+        entry[name] = values
+    else:
+        rows = entry.shape[0]
+        lenlist = len(values)
+        print(f"length mismatch: the table has {rows} rows but the given list has {lenlist} rows")
+    return entry
+
+
+def myClear(entry, value):
+    return VOIDENTRY
+
+
+def myLimit(entry, value):
+    return entry.iloc[:int(value)]
+
+
+def myPlot(entry, value):
+    columns = value.split(",")
+    plt.plot(entry[columns[0]], entry[columns[1]])
+    plt.show(block=False)
+    return entry
+
+
+def parameter_manager(entry, values):
+    pass
 
 
 FUNCTIONCOMMANDS = {
@@ -364,9 +538,7 @@ FUNCTIONCOMMANDS = {
         "csv": myCsv,
         "display": display,
         "print": myPrint,
-        "countis": countis,
         "count": count,
-        "check_from": check_from,
         "select": select,
         "reference": reference,
         "rename": rename,
@@ -376,8 +548,19 @@ FUNCTIONCOMMANDS = {
         "resume": myResume,
         "calc": myCalc,
         "sort": mySort,
-        "shuffle": myShuffle
+        "shuffle": myShuffle,
+        "dt": myDate,
+        "float": myFloat,
+        "str": myString,
+        "map": myMap,
+        "slice": mySlice,
+        "list": myList,
+        "clear": myClear,
+        "sum": mySum,
+        "limit": myLimit,
+        "plot": myPlot,
         }
 
 entr = pd.DataFrame({"A": ["pierre"], "B": ["ami"], "C": ["anne"]})
 delete(entr, ('fact', 'pierre', 'ami', 'anne'))
+

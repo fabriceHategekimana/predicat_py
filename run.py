@@ -2,11 +2,6 @@ from commands import *
 from functools import reduce
 
 
-def dataPrint(dataFrame):
-    concatenation = lambda x: print(",".join(x))
-    dataFrame.apply(concatenation, axis=1)
-
-
 def run(inp):
     """run a command. Two cases:
         1) this is a rule command and we perform delete, display or save
@@ -31,10 +26,6 @@ def runFromExternal(inp):
     if first == "rule":
         rest = runRule(rest)
         subRun(rest)
-    elif first == "node":
-        dataPrint(db.getNodes())
-    elif first == "link":
-        dataPrint(db.getLinks())
     else:
         val = runCommand(inp)
         dataPrint(val)
@@ -102,40 +93,95 @@ def is_element(command):
         return False
 
 
-def format_command(command):
-    if is_element(command):
-        command = db.getMacro(command[1])[0][0]
+def macro_error_message(command):
+    print(f"Bad name: there is no macro that has the name '{command}'.")
+    print("------------")
+    print("Try look for thoses existing ones or create your own with this name:")
+    functions = pd.DataFrame(db.getMacroList(), columns=["name", "command"])
+    for name in functions["name"]:
+        print("    - "+name)
+    print("------------")
+
+
+def format_command(command, parameters):
+    if "$" not in command:
+        if " " in command and parameters != [""]:
+            print("Bad assignation: you give a parameter(s) to an expression that doesn't accept parmeter")
+        else:
+            function = db.getMacro(command)
+            if function == []:
+                macro_error_message(command)
+            else:
+                command = function[0][0]
     return command
 
 
+def isValue(param):
+    if to_float(param) != None:
+        return True
+    elif "'" in param or '"' in param:
+        return True
+    else:
+        return False
+
+
+def convertValue(param):
+    if param.isnumeric():
+        return int(param)
+    elif "." in param and param.replace(".", "").isnumeric():
+        return to_float(param)
+    elif "'" in param or '"' in param:
+        return param[1:-1]
+    else:
+        return param
+
+
+def format_parameters(parameters_string, entry):
+    params = parameters_string.split(",")
+    parameters = []
+    for param in params:
+        if param in entry.columns or isValue(param):
+            parameters.append(convertValue(param))
+    return parameters
+
+
+def create_link_command(columns):
+    columns = columns.split(",")
+    letters = "BCDEFGHIJKLMNOPQRSTUVWXYZ"
+    i = 0
+    new_command = []
+    old_name = []
+    new_name = []
+    for column in columns:
+        new_command.append(f"A {column} {letters[i]}")
+        old_name.append(f"{letters[i]}")
+        new_name.append(f"{column}")
+        i += 1
+    new_command = "check "+" and ".join(new_command)+" "
+    part2 = "rename column ("+",".join(old_name)+") ("+",".join(new_name)+")"
+    return new_command+part2
+
+
 def runCommand(inp):
-    # check A grade lt append (check $1 engagement B) (A) (B) append (check $1 $2 C) (A,B) (C)
-    # check A species B select A append [calc ($1+1)] [A] [C]
     inp = syntaxSugarCommand(inp)
     commands = parser.parse(inp)
     entry = VOIDENTRY
-    for c in commands:
-        '''On traite en premier lieu les expresion de degré superieur
-        exec et append'''
-        if c[0] == "exec":
-            command = c[1][0]
-            parameters = c[1][1]
-            command = format_command(command)
-            if parameters == "":
-                entry = runCommand(command)
-            else:
+    if commands is not None:
+        for c in commands:
+            # Expression de degrés supérieur (qui execute d'autre expressions du même langage)
+            if c[0] == "exec":
+                command = c[1][0]
+                parameters = format_parameters(c[1][1], entry)
+                command = format_command(command, parameters)
                 entry = runParametrizedCommand(entry, parameters, command)
-        elif c[0] == "append":
-            command = c[1][0]
-            parameters = c[1][1]
-            columns = c[1][2]
-            command = format_command(command)
-            if parameters == "":
-                entry = runCommand(command)[parameters.split(",")+columns.split(",")]
+            elif c[0] == "links":
+                new_command = create_link_command(c[1])
+                entry = runCommand(new_command)
             else:
-                entry = runParametrizedCommand(entry, parameters, command)[parameters.split(",")+columns.split(",")]
-        else:
-            entry = execute(entry, c)
+                entry = execute(entry, c)
+    else:
+        print(f"syntax: there is a problem with the syntax of your sentence:\n '{inp}'")
+        print("-----------------")
     return entry
 
 
@@ -143,36 +189,77 @@ def get_dataframe_from_line(line):
     return line[1]
 
 
-def replace_parameter_by_value2(command, values, parameters):
+def replace_parameter_by_value(command, values, parameters):
+    if parameters != [""]:
+        i = 0
+        for p in parameters:
+            if p in values.index:
+                val = values[p]
+            else:
+                val = p
+            command = command.replace(f"${i+1}", f"{val}")
+            i += 1
+    return command
+
+
+def replace_parameter_by_value2(command, values):
     i = 0
-    for p in parameters:
-        val = values[p]
+    for val in values:
         command = command.replace(f"${i+1}", f"{val}")
         i += 1
     return command
 
 
 def run_command_with_parameters(command, serie, parameters):
-    command = replace_parameter_by_value2(command, serie, parameters)
-    # command = replace_parameter_by_value(command, serie)
+    if isinstance(serie, list):
+        command = replace_parameter_by_value2(command, serie)
+    else:
+        command = replace_parameter_by_value(command, serie, parameters)
     entry = runCommand(command)
     return entry
 
 
-# TODO à déselectionner la ligne 160
+def parameters_exist(command):
+    if command.find("$") > -1:
+        return True
+    else:
+        return False
+
+
+def nb_parameters(command):
+    return command.count("$")
+
+
+def pcount(params):
+    if params == [""]:
+        return 0
+    else:
+        return len(params)
+
+
 def runParametrizedCommand(entry, parameters, command):
-    parameters = parameters.split(",")
-    # selected_entry = entry[parameters]
-    selected_entry = entry
-    data = []
-    for line in selected_entry.iterrows():
-        line = get_dataframe_from_line(line)
-        df = run_command_with_parameters(command, line, parameters)
-        for p, l in zip(parameters, line):
-            df[p] = l
-        data.append(df)
-    final = pd.concat(data, ignore_index=True)
-    return final
+    selected_entry = entry.copy()
+    if (selected_entry.empty or parameters == [""]) and not parameters_exist(command):
+        return runCommand(command)
+    else:
+        if nb_parameters(command) == pcount(parameters):
+            if not selected_entry.empty:
+                data = []
+                for line in selected_entry.iterrows():
+                    line = get_dataframe_from_line(line)
+                    df = run_command_with_parameters(command, line, parameters)
+                    for c, l in zip(entry.columns, line):
+                        df[c] = l
+                    data.append(df)
+                return pd.concat(data, ignore_index=True)
+            else:
+                df = run_command_with_parameters(command, parameters, parameters)
+                return df
+        else:
+            awaited = nb_parameters(command)
+            founded = pcount(parameters)
+            print(f"parameter mismatch: {awaited} awaited but {founded} found")
+            return VOIDENTRY
 
 
 def execute(entry, c):
@@ -239,9 +326,6 @@ def syntaxSugarCommand(command):
             command = "check A B C display A B C"
         elif isSet(rest):
             command = "check "+rest+" "+command
-    elif first == "check":
-        if rest == "all":
-            command = "check A B C"
     return command
 
 
@@ -251,3 +335,5 @@ def syntaxSugarRule(rule):
         if " then " in rest:
             rule = "check "+rest.replace(" then ", " add ")
     return rule
+
+

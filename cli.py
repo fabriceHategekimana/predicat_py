@@ -16,7 +16,7 @@ class MyPrompt(Cmd):
 
     def default(self, inp):
         if self.mode == "union":
-            commands = parser.parse(inp, debug=False)
+            commands = parser.parse(inp, debug=True)
             print(commands)
         elif self.mode == "sql":
             if inp[0:7] == "select":
@@ -81,6 +81,7 @@ class MyPrompt(Cmd):
         db.sqlModify("DELETE FROM rules")
         db.sqlModify("DELETE FROM historical")
         db.sqlModify("DELETE FROM stage")
+        db.sqlModify("DELETE FROM macro")
         db.sqlModify("INSERT INTO stage (stage) values (0)")
 
     def do_context(self, inp):
@@ -112,14 +113,19 @@ class MyPrompt(Cmd):
         if inp == "":
             print(help_info)
         elif params[0] == "list":
-            print(db.getMacroList())
+            print(pd.DataFrame(db.getMacroList(), columns=["name", "command"]))
         elif params[0] == "delete":
             db.deleteMacro(params[1])
         elif params[0] == "add":
             db.addMacro(params[1], " ".join(params[2:]))
+        elif params[0] == "modify":
+            db.deleteMacro(params[1])
+            db.addMacro(params[1], " ".join(params[2:]))
         elif params[0] == "get":
             macro = db.getMacro(params[1])
             print(macro)
+        else:
+            print(help_info)
 
     def completedefault(self, text, line, begidx, endidx):
         table = db.getDefaultTable()
@@ -130,4 +136,5 @@ class MyPrompt(Cmd):
             tab.append(n[0])
         return tab
 
-#MyPrompt().cmdloop()
+
+MyPrompt().cmdloop()

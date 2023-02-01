@@ -138,8 +138,10 @@ class Data():
         """
         target = self.arrangeTarget(target)
         facts = facts.dropna()
+        for column in facts.columns:
+            facts[column] = facts[column].map(str)
         if facts.shape[1] == 3:
-            #adding fact in history
+            # adding fact in history
             for index, fact in facts.iterrows():
                 self.addInHistory(" ".join(fact))
             if facts.empty == False:

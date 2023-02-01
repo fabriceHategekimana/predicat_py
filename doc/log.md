@@ -11,46 +11,11 @@ macro name "check $1 truc ..."
 `[mer 20 jui 2022 01:30:21 CEST]`
 Finalement fini l'implémentation du exec
 C'est mieux d'utiliser les parenthèse qui donnent un certain style pour la définition d'expression
-
------
-
-exec "1 + 5"
-
-TODO: ici on parse manuellement
-`macro` incr calc "$1+1"
-
-check A age B exec incr "B" // renvoie seulement le nouveau tableau
-check A age B append "C" incr "B" // ajoute les colonnes désirées dans le tableau précédent
-check A age B append "C" "hello"
-
-----
-
-macro get_lieux "check A lieu B select B"
-
-exec get_lieux 
-
---------
-
-append "C" "hello"
-append "C;D;E" "hello;hello;hello"
-append "C" nb_repos "A"
-
---------
-
-macro nb_repos "check $1 engagement B filter B contains repos count"
-
-check A type id exec nb_repos "A"
-
-Dans la commande:
-on va faire une boucle pour obtenir les résultats de chaque instances.
-Si on tombe sur plusieur résultats pour un élément on duplique l'élément:
-exemple
-element : Fabrice; résultats: un,deux,trois on a donc:
-
-| A       | B     |
-|---------|-------|
-| Fabrice | un    |
-| Fabrice | deux  |
-| Fabrice | trois |
-
-Il nous reste plus qu'à concatener tout les tableau et retourner le resultat
+`[jeu 21 jui 2022 10:45:27 CEST]`
+J'ai tenté de simuler un task manager avec predicat.
+J'ai ajouté hier deux trois commandes pour gérer les dates. On a un convertisseur deux trois générateur et une opération.
+`[jeu 21 jui 2022 12:00:09 CEST]`
+Suite d'idée:
+les linebreak ne marchent pas
+fichier predicat saut de ligne execute les commandes idpendament
+faire un select normal ou unique
