@@ -43,15 +43,18 @@ class MyPrompt(Cmd):
     def do_check(self, inp):
         if self.mode == "normal":
             tab= inp.split(" ")
-            title= tab.pop(0)
-            if title == "nodes":
-                print(self.d.sqlQuery("select distinct subject from facts union select distinct goal from facts;"))
-            elif title == "links":
-                print(self.d.sqlQuery("select distinct link from facts;"))
-            elif title == "rules":
-                print(self.d.sqlQuery("select * from rules;"))
+            if tab == [""]:
+                self.print_check_help()
             else:
-                print(self.getTable("check "+inp))
+                title= tab.pop(0)
+                if title == "nodes":
+                    print(self.d.sqlQuery("select distinct subject from facts union select distinct goal from facts;"))
+                elif title == "links":
+                    print(self.d.sqlQuery("select distinct link from facts;"))
+                elif title == "rules":
+                    print(self.d.sqlQuery("select * from rules;"))
+                else:
+                    print(self.getTable("check "+inp))
         elif self.mode == "union":
             res= self.parserFormat("check "+inp)
             if res.find("&") != 0: #s'il n'y a pas d'erreur
@@ -155,7 +158,7 @@ class MyPrompt(Cmd):
             print("[format]: csv or gephy")
 
     def do_import(self, inp):
-        self.fromCSV(inp) 
+        self.fromCSV(inp)
 
     def do_clear(self, inp):
         self.d.sqlModify("delete from facts")
@@ -165,17 +168,20 @@ class MyPrompt(Cmd):
         print("database cleared!")
 
     def do_rename(self, inp):
-        #["nodes or links", "old", "new"]
+        # ["nodes or links", "old", "new"]
         tab= inp.split(" ")
-        if len(tab) == 3:
-            if tab[0] == "nodes":
-                self.d.sqlModify("update facts set subject='"+tab[2]+"' where subject='"+tab[1]+"'")
-                self.d.sqlModify("update facts set goal='"+tab[2]+"' where goal='"+tab[1]+"'")
-            elif tab[0] == "links":
-                self.d.sqlModify("update facts set link='"+tab[2]+"' where link='"+tab[1]+"'")
-            else:
-                print("Bad syntax. It should be: 'rename [target] [oldname] [newname]")
-                print("[target]= nodes or links")
+        if tab == [""]:
+            print_rename_help()
+        else:
+            if len(tab) == 3:
+                if tab[0] == "nodes":
+                    self.d.sqlModify("update facts set subject='"+tab[2]+"' where subject='"+tab[1]+"'")
+                    self.d.sqlModify("update facts set goal='"+tab[2]+"' where goal='"+tab[1]+"'")
+                elif tab[0] == "links":
+                    self.d.sqlModify("update facts set link='"+tab[2]+"' where link='"+tab[1]+"'")
+                else:
+                    print("Bad syntax. It should be: 'rename [target] [oldname] [newname]")
+                    print("[target]= nodes or links")
 
     def getPredicat(self,exp):
         res= exp
@@ -301,5 +307,12 @@ class MyPrompt(Cmd):
         for n in nodes:
             tab.append(n[0])
         return tab
+    
+    def print_check_help(self):
+        print("\n check: allow you to look for information about the datas of predicat\nYou can use:\n- nodes\n- links\n- rules\n- [query] (= predicat query)")
+
+    def print_rename_help(self):
+        print("\n rename: allow you to rename a entity in predicat\nYou can use:\n- node [old_name] [new_name]\n- link [old_name] [new_name]")
+        
 
 MyPrompt().cmdloop()
