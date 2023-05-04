@@ -3,18 +3,21 @@ import ply.yacc as yacc
 import math as m
 import csv
 
-typeTable= {}
-VALUES= []
+typeTable = {}
+VALUES = []
+
 
 def writeCSV(tab, fname="res.txt"):
     with open(fname, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerows(tab)
 
+
 def write(exp, fname="res.txt"):
-    f= open(fname, "w")
+    f = open(fname, "w")
     f.write(exp)
     f.close()
+
 
 def completeAnonymousVariables(exp):
     if exp.find("$VAR$") > -1:
@@ -38,20 +41,21 @@ def completeAnonymousVariables(exp):
 #| |__|  __/>  <  __/ |   
 #|_____\___/_/\_\___|_|   
 
-reserved = { 
-        "add" : "ADD",
-        "check" : "CHECK",
-        "and" : "AND",
-        "or" : "OR",
-        "if" : "IF",
-        "then" : "THEN",
-        "not" : "NOT",
-        "contains" : "CONTAINS",
-        "macro" : "MACRO",
-        "filter" : "FILTER",
-        "get" : "GET"
+
+reserved = {
+        "add": "ADD",
+        "check": "CHECK",
+        "and": "AND",
+        "or": "OR",
+        "if": "IF",
+        "then": "THEN",
+        "not": "NOT",
+        "contains": "CONTAINS",
+        "macro": "MACRO",
+        "filter": "FILTER",
+        "get": "GET"
         }
-                         
+
 tokens = [
     'NUM',
     'VAR',
@@ -66,13 +70,13 @@ tokens = [
     'EXCL'
         ]+list(reserved.values())
 
-t_INF= r'\<'
-t_SUP= r'\>'
-t_EQUAL= r'\='
-t_MINUS= r'\-'
-t_PLUS= r'\+'
-t_DOT= r'\.'
-t_EXCL= r'\!'
+t_INF = r'\<'
+t_SUP = r'\>'
+t_EQUAL = r'\='
+t_MINUS = r'\-'
+t_PLUS = r'\+'
+t_DOT = r'\.'
+t_EXCL = r'\!'
 
 t_ignore = r' '
 
@@ -94,18 +98,21 @@ def t_VAR(t):
 def t_STRING(t):
     r'"([^"\n])*"'
     t.type = reserved.get(t.value,'STRING')
-    t.value= t.value[1:-1]
+    t.value = t.value[1:-1]
     return t
+
 
 def t_error(t):
     write("&Error: Illegal characters! ", t)
     t.lexer.skip(1)
 
-lexer= lex.lex()
 
-#----------------------------------
+lexer = lex.lex()
 
-#Parser
+# ----------------------------------
+
+# Parser
+
 
 def p_start(p):
     '''
@@ -113,6 +120,7 @@ def p_start(p):
           | CHECK check
     '''
     print("+--------------+")
+
 
 def p_add(p):
     '''
@@ -155,7 +163,7 @@ def p_check1(p):
     check : prop filt get
     '''
     p[1]= completeAnonymousVariables(p[1])
-    res= " &part& ".join(p[1:])
+    res = " &part& ".join(p[1:])
     write(res)
 
 def p_check2(p):
@@ -163,7 +171,7 @@ def p_check2(p):
     check : prop filt
     '''
     p[1]= completeAnonymousVariables(p[1])
-    res= p[1]+" &part& "+p[2]+" &part& *" #the star is important for the "all" in sql queries
+    res = p[1]+" &part& "+p[2]+" &part& *" #the star is important for the "all" in sql queries
     write(res)
 
 def p_check3(p):
@@ -171,22 +179,24 @@ def p_check3(p):
     check : prop get
     '''
     p[1]= completeAnonymousVariables(p[1])
-    res= p[1]+" &part&  &part& "+p[2] #the star is important for the "all" in sql queries
+    res = p[1]+" &part&  &part& "+p[2] #the star is important for the "all" in sql queries
     write(res)
 
 def p_check4(p):
     '''
     check : prop
     '''
-    p[1]= completeAnonymousVariables(p[1])
-    res= p[1]+" &part&  &part& *" #the star is important for the "all" in sql queries
+    p[1] = completeAnonymousVariables(p[1])
+    res = p[1]+" &part&  &part& *"  # the star is important for the "all" in sql queries
     write(res)
+
 
 def p_prop1(p):
     '''
     prop : prop log_op prop
     '''
     p[0] = p[1]+" &"+p[2]+"& "+p[3]
+
 
 def p_prop2(p):
     '''
@@ -239,17 +249,20 @@ def p_prop_tail3(p):
     '''
     p[0] = p[1]+"&&"+p[2]
 
+
 def p_filt1(p):
     '''
     filt : FILTER filter
     '''
     p[0] = p[2]
 
+
 def p_filt2(p):
     '''
     filter : filter log_op filter
     '''
     p[0] = p[1]+" &"+p[2]+"& "+p[3]
+
 
 def p_filt3(p):
     '''
@@ -289,12 +302,14 @@ def p_ent_var(p):
     '''
     p[0] = p[1]
 
+
 def p_log_op(p):
     '''
     log_op : AND
            | OR
     '''
     p[0] = p[1]
+
 
 def p_filter_op(p):
     '''
@@ -308,11 +323,13 @@ def p_filter_op(p):
     '''
     p[0] = "".join(p[1:])
 
+
 def p_rule(p):
     '''
     rule : IF logalg_rule THEN logalg_rule
     '''
     p[0] = p[2].replace("&&", " ")+"&&rule&&"+p[4].replace("&&", " ")
+
 
 def p_logalg_rule1(p):
     '''
@@ -320,12 +337,14 @@ def p_logalg_rule1(p):
     '''
     p[0] = p[1]+" &"+p[2]+"& "+p[3]
 
+
 def p_logalg_rule2(p):
     '''
     logalg_rule : ent_var ent_var ent_var
                 | ent_var filter_op ent
     '''
     p[0] = "&&".join(p[1:])
+
 
 def p_macro(p):
     '''
@@ -336,4 +355,4 @@ def p_macro(p):
 def p_error(p):
     write("&Error bad syntax")
 
-parser= yacc.yacc()
+parser = yacc.yacc()
