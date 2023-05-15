@@ -162,7 +162,7 @@ def p_exp(p):
 
 def p_cmds(p):
     '''cmds : cmd mcmd'''
-    if p[2] == None:
+    if p[2] is None:
         res = []
     else:
         res = p[2] 
@@ -176,11 +176,11 @@ def p_mcmd0(p):
 
 def p_mcmd1(p):
     '''mcmd : cmd mcmd'''
-    if p[2] == None:
-        res= []
+    if p[2] is None:
+        res = []
     else:
-        res= p[2] 
-    p[0]= [p[1]]+res
+        res = p[2] 
+    p[0] = [p[1]]+res
 
 
 def p_cmd(p):
@@ -259,7 +259,7 @@ def p_content2(p):
 
 def p_is_comparators(p):
     '''comparators : comparator conjcomparator'''
-    if p[2] == None:
+    if p[2] is None:
         res = []
     else:
         res = p[2]
@@ -280,16 +280,16 @@ def p_is_comparator2(p):
 
 def p_is_comparator3(p):
     '''compnextelement : symbol element'''
-    p[0]= [p[1], p[2][1]]
+    p[0] = [p[1], p[2][1]]
 
 
 def p_conjcomparator2(p):
     '''conjcomparator : AND comparator conjcomparator
     '''
-    if p[3] == None:
-        res= []
+    if p[3] is None:
+        res = []
     else:
-        res= p[3]
+        res = p[3]
     p[0]= [p[2]] + res
 
 
@@ -338,10 +338,10 @@ def p_is_fact(p):
 
 def p_is_set0(p):
     '''set : set_fact conjset'''
-    if p[2] == None:
-        res= []
+    if p[2] is None:
+        res = []
     else:
-        res= p[2]
+        res = p[2]
     p[0] = ("set", [p[1]] + res)
 
 
@@ -415,10 +415,10 @@ def p_is_set5(p):
 def p_is_set6(p):
     '''conjset : AND set_fact conjset
     '''
-    if p[3] == None:
-        res= []
+    if p[3] is None:
+        res = []
     else:
-        res= p[3]
+        res = p[3]
     p[0]= [p[2]] + res
 
 
