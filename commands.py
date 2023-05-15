@@ -119,7 +119,7 @@ def valueOrVariable(entry, set_value):
             res = entry[set_value].values
     else:
         if entry.shape[0] > 0:
-            res = np.full(shape=entry.shape[0], fill_value=set_value, dtype=np.object)
+            res = np.full(shape=entry.shape[0], fill_value=set_value, dtype=object)
         else:
             res = [set_value]
     return res
